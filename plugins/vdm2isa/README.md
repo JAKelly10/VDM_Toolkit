@@ -38,6 +38,14 @@ This plugin project creates an interconnected eco system of plugins as:
 
 The instructions below presumes a Linux/MacOS environment, but Windows should be similar with necessary adjustments. 
 
+## Fast Install
+
+Install a fast version for development from an empty directory with the following
+
+```wget -L https://raw.github.com/JAKelly10/VDM_Toolkit/main/scripts/installer.sh && source installer.sh && rm installer.sh```
+
+## Standard Install
+
 1. Assumptions:
 	* All dependencies are properly installed
 	* `VDMJ` repo is cloned (`git clone https://github.com/nickbattle/vdmj.git`) 
