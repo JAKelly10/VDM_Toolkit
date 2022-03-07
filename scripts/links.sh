@@ -1,15 +1,9 @@
 #!/bin/bash
 
-# Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
-fi
+filepath=$VDMJTK_HOME/scripts/vdmj.sh
+filepath_build=$VDMJTK_HOME/scripts/vdmj_build.sh
 
-# Make sure vdmj & vdmj_build don't already exist
-
-rm -f /usr/local/bin/vdmj
-rm -f /usr/local/bin/vdmj_build
-
-ln -s $VDMJTK_HOME/scripts/vdmj.sh /usr/local/bin/vdmj
-ln -s $VDMJTK_HOME/scripts/vdmj_build.sh /usr/local/bin/vdmj_build
+sudo rm -f /usr/local/bin/vdmj 
+sudo rm -f /usr/local/bin/vdmj_build
+sudo ln -s $filepath /usr/local/bin/vdmj 
+sudo ln -s $filepath_build /usr/local/bin/vdmj_build

@@ -1,6 +1,12 @@
 #!/bin/bash
 
-FOLDERPATH=$HOME/VDM2ISA
+
+#Dev folder location of fast install
+#FOLDERPATH=$HOME/VDM2ISA
+
+SCRIPTPATH=$PWD
+
+FOLDERPATH=$SCRIPTPATH
 
 echo "Setting export paths"
 
