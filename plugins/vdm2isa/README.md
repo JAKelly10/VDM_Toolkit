@@ -42,7 +42,7 @@ The instructions below presumes a Linux/MacOS environment, but Windows should be
 
 Install a fast version for development from an empty directory with the following
 
-```wget -L https://raw.github.com/JAKelly10/VDM_Toolkit/main/scripts/installer.sh && source installer.sh && rm installer```
+```wget -L https://raw.github.com/JAKelly10/VDM_Toolkit/main/scripts/installer.sh && source installer.sh && rm installer.sh```
 
 ## Standard Install
 
