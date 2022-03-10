@@ -7,6 +7,7 @@ import com.fujitsu.vdmj.tc.definitions.TCTypeDefinition;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
+import com.fujitsu.vdmj.tc.expressions.TCExpression;
 
 import vdm2isa.lex.IsaToken;
 import vdm2isa.lex.TRIsaVDMCommentList;
@@ -15,19 +16,18 @@ import vdm2isa.tr.annotations.TRAnnotationList;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.patterns.TRPattern;
-import vdm2isa.tr.types.TRFunctionType;
-import vdm2isa.tr.types.TRInvariantType;
 import vdm2isa.tr.types.TRRecordType;
 import vdm2isa.tr.types.TRType;
 
 public class TRStateDefinition extends TRAbstractTypedDefinition {
 
-    private final TRPattern initPattern;
-    private final TRExpression initExpression;
-    private final TRExplicitFunctionDefinition initdef;
+    public final TRPattern initPattern;
+    //public final TRExpression initExpression;
+    public final TRExpression initExpression;
+    public final TRExplicitFunctionDefinition initdef;
     private final TRDefinitionList statedefs;
     private final boolean canBeExecuted;
-    private final TRRecordType recordType;
+    public final TRRecordType recordType;
 
     public TRStateDefinition(
         // all those belong to TRDefinition
@@ -42,9 +42,10 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // will keep it simple and rely on the TRRecordType structure for the TCStateDefinition 
         // correspondent that will work nicely, given the record translation
         TRPattern initPattern,
+        //TRExpression initExpression,
         TRExpression initExpression, 
         TRExplicitFunctionDefinition initdef, 
-        //TRDefinitionList statedefs, 
+        TRDefinitionList statedefs, 
         boolean canBeExecuted  
         ) 
     {
@@ -52,7 +53,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         this.initPattern = initPattern;
         this.initExpression = initExpression;
         this.initdef = initdef;
-        this.statedefs = null;//statedefs; 
+        this.statedefs = statedefs; 
         this.canBeExecuted = canBeExecuted; 
         // see similar exmaple in TRMapType etc. 
         this.recordType = recordType;   // super.type = this.recordType; needed for TR mapping 
