@@ -255,7 +255,7 @@ public abstract class TRExpressionVisitor<R, S>
         return caseExpression(node, arg);
     }
 
-    public R caseStateInitExpression(TRStateInitExpression node, S arg) {
+    public R createStateInitExpression(TRStateInitExpression node, S arg) {
         return caseExpression(node, arg);
     }
 }
