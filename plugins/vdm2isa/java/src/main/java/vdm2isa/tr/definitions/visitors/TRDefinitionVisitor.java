@@ -19,6 +19,7 @@ import vdm2isa.tr.definitions.TRRenamedDefinition;
 import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.definitions.TRTypeDefinition;
 import vdm2isa.tr.definitions.TRValueDefinition;
+import vdm2isa.tr.expressions.TRStateInitExpressionDefinition;
 
 /**
  * The base type for all TRDefinition visitors. All methods, by default, call
@@ -88,4 +89,5 @@ public abstract class TRDefinitionVisitor<R, S>
     public R createStateDefinition(TRStateDefinition node, S arg) {
         return caseDefinition(node, arg);
     }
+
 }

@@ -68,7 +68,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // * need to worry about state invariant implicit check see TRTypeDefinition for it  
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
-        TRNode.setup(recordType, initPattern, initExpression, initdef, statedefs);
+        TRNode.setup(recordType, statedefs); //initPattern, initExpression, initdef
     }
 
     @Override 
