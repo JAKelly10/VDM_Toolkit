@@ -29,7 +29,6 @@ abstract public class TRNode extends MappedObject implements MappableNode
 	protected TRNode(LexLocation location)
 	{
 		super();
-		System.out.println(location);
 		this.location = location != null ? location : LexLocation.ANY; 
 		this.separator = "";
 		this.formattingSeparator = "";

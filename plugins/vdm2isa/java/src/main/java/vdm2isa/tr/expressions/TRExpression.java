@@ -82,8 +82,6 @@ public abstract class TRExpression extends TRNode
 	public TRExpression(LexLocation location, TCExpression exp, TRType exptype)
 	{
 		super(location);
-        System.out.println(exp);
-        System.out.println(exptype);
         this.exp = exp;
         this.exptype = exptype;
         this.hasWarnedAboutUnknownType = false;
