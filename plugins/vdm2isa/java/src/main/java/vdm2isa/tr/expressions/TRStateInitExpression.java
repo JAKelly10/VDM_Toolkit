@@ -15,24 +15,26 @@ import vdm2isa.tr.types.TRType;
 
 public class TRStateInitExpression extends TRExpression {
 
+    private TRStateDefinition state;
+
     //This has no access to information as in VDMJ it is purely used as a type checker and nothing else. 
     //All of the logic is in StateDefinition
-    public TRStateInitExpression(TCStateInitExpression tc, TRType exptype) {
+    public TRStateInitExpression(TCStateInitExpression tc, TRType exptype, TRStateDefinition state) {
         super(tc != null && tc.location != null ? tc.location : LexLocation.ANY, (TCExpression)tc, exptype);
+        this.state = state;
     }
 
     @Override
     public void setup()
     {
         super.setup();
-        // anything specific to check?
-        // * look into TRTypeDefinition for implicitly creating init expression if empty
-        // * need to worry about state invariant implicit check see TRTypeDefinition for it  
-        // * arguably you could perhaps think of extending TRTypeDefinition 
-
-        //TRNode.setup(initExpression,initPattern, initdef); //initPattern, initExpression
+        TRNode.setup(this.state);
     }
 
+    @Override
+    public String toString(){
+        return super.toString();
+    }
 
     @Override
     public <R, S> R apply(TRExpressionVisitor<R, S> visitor, S arg) {
@@ -49,7 +51,7 @@ public class TRStateInitExpression extends TRExpression {
     @Override
     public String translate() {
         // TODO Auto-generated method stub
-        return "init ";
+        return state.initPattern.translate() + state.initExpression.translate();
     }
 
 }

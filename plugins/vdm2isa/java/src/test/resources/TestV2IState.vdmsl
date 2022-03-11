@@ -4,8 +4,9 @@ definitions
 
 state S of  
    x : nat 
-inv mk_S(x) == x > 10
-init s == s = mk_S(20)
+   y : real
+inv mk_S(x,y) == x > 10 and y < 10
+init s == s = mk_S(20,5)
 end
 
 end TestV2IState

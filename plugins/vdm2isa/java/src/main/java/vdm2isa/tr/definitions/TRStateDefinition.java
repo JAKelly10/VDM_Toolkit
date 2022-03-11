@@ -18,14 +18,13 @@ import vdm2isa.tr.annotations.TRAnnotationList;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 import vdm2isa.tr.expressions.TRBinaryExpression;
 import vdm2isa.tr.expressions.TRExpression;
+import vdm2isa.tr.expressions.TRStateInitExpression;
 import vdm2isa.tr.patterns.TRPattern;
 import vdm2isa.tr.types.TRRecordType;
 import vdm2isa.tr.types.TRType;
 
 public class TRStateDefinition extends TRAbstractTypedDefinition {
-
     public final TRPattern initPattern;
-    //public final TRExpression initExpression;
     public final TRExpression initExpression;
     public final TRExplicitFunctionDefinition initdef;
     private final TRDefinitionList statedefs;
@@ -84,8 +83,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String toString()
     {
-        return "SteteDef = " + 
-            "...";
+        return super.toString();
     }
 
     public TRBinaryExpression getInitExpression()
@@ -106,6 +104,19 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String translate()
     {
-        return "STATE! = " + super.translate();
+        return super.translate() + recordTranslation()+ "\n" +"\n"+ translateInit();
+    }
+
+    public String recordTranslation(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("record "+ name+ " =");
+        for(int i = 2; i<statedefs.size(); i+=2){
+            sb.append(statedefs.get(i).translate().replace('(', ' ').replace(')',' ').replace("::", " :: "));
+        }
+        return sb.toString();
+    }
+
+    public String translateInit(){
+        return initdef.translate();
     }
 }
