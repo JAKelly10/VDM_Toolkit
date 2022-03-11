@@ -42,7 +42,6 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // will keep it simple and rely on the TRRecordType structure for the TCStateDefinition 
         // correspondent that will work nicely, given the record translation
         TRPattern initPattern,
-        //TRExpression initExpression,
         TRExpression initExpression, 
         TRExplicitFunctionDefinition initdef, 
         TRDefinitionList statedefs, 
@@ -68,7 +67,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // * need to worry about state invariant implicit check see TRTypeDefinition for it  
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
-        TRNode.setup(recordType, statedefs); //initPattern, initExpression, initdef
+        TRNode.setup(recordType, statedefs,initPattern, initExpression, initdef); //initPattern, initExpression, initdef
     }
 
     @Override 

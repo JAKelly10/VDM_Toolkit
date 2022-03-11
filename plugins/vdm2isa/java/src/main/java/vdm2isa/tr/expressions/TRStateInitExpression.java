@@ -2,34 +2,23 @@ package vdm2isa.tr.expressions;
 
 import com.fujitsu.vdmj.lex.LexLocation;
 import com.fujitsu.vdmj.tc.expressions.TCExpression;
-import com.fujitsu.vdmj.tc.definitions.TCStateDefinition;
 import com.fujitsu.vdmj.tc.expressions.TCStateInitExpression;
-
 
 import vdm2isa.lex.IsaToken;
 import vdm2isa.tr.TRNode;
-import vdm2isa.tr.definitions.TRDefinition;
-import vdm2isa.tr.definitions.TRDefinitionList;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
 import vdm2isa.tr.expressions.visitors.TRExpressionVisitor;
 import vdm2isa.tr.definitions.TRStateDefinition;
-import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 import vdm2isa.tr.patterns.TRPattern;
-import vdm2isa.tr.types.TRRecordType;
 import vdm2isa.tr.types.TRType;
+
 
 public class TRStateInitExpression extends TRExpression {
 
-    private final TRPattern initPattern;
-    private final TRExpression initExpression;
-    private final TRExplicitFunctionDefinition initdef;
-
-    public TRStateInitExpression(TCStateInitExpression tc, TRStateDefinition state) {
-        super(state.initExpression.location, (TCExpression)tc, state.initExpression.getType());
-        this.initPattern = state.initPattern;
-        this.initExpression = state.initExpression;
-        this.initdef = state.initdef;
-
+    //This has no access to information as in VDMJ it is purely used as a type checker and nothing else. 
+    //All of the logic is in StateDefinition
+    public TRStateInitExpression(TCStateInitExpression tc, TRType exptype) {
+        super(tc != null && tc.location != null ? tc.location : LexLocation.ANY, (TCExpression)tc, exptype);
     }
 
     @Override
@@ -41,7 +30,7 @@ public class TRStateInitExpression extends TRExpression {
         // * need to worry about state invariant implicit check see TRTypeDefinition for it  
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
-        TRNode.setup(initExpression,initPattern, initdef); //initPattern, initExpression
+        //TRNode.setup(initExpression,initPattern, initdef); //initPattern, initExpression
     }
 
 
@@ -60,7 +49,7 @@ public class TRStateInitExpression extends TRExpression {
     @Override
     public String translate() {
         // TODO Auto-generated method stub
-        return "init " + initPattern.translate() + "expr " + initExpression.translate();
+        return "init ";
     }
 
 }
