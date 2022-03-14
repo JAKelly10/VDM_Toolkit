@@ -1,4 +1,4 @@
-(* VDM to Isabelle Translation @2022-03-11T18:17:59.573Z
+(* VDM to Isabelle Translation @2022-03-14T12:50:51.081Z
    Copyright 2021, Leo Freitas, leo.freitas@newcastle.ac.uk
 
 in 'plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl' at line 1:8
@@ -16,25 +16,29 @@ y:real
 	init s == (s = mk_S(20, 5))
 end\<close>
 \<comment>\<open>in 'TestV2IState' (plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl) at line 5:7\<close>
-record S =
+record State =
 \<comment>\<open>VDM source: x = nat\<close>
 \<comment>\<open>in 'TestV2IState'  plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl  at line 6:4\<close>
- x :: VDMNat 
+ x::VDMNat 
 \<comment>\<open>VDM source: y = real\<close>
 \<comment>\<open>in 'TestV2IState'  plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl  at line 7:4\<close>
- y :: VDMReal 
+ y::VDMReal 
 
-
-\<comment>\<open>VDM source: init_S: (S +> bool)
-	init_S(s) ==
-init s == (s = mk_S(20, 5))\<close>
-\<comment>\<open>in 'TestV2IState' (plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl) at line 9:6\<close>
 definition
-	init_S :: "S \<Rightarrow> bool"
+	inv_State :: "State \<Rightarrow> bool"
 where
-	"init_S s \<equiv> 
-		\<comment>\<open>User defined body of init_S.\<close>
-		s(s = \<lparr>x\<^sub>S = (20::VDMNat1), y\<^sub>S = (5::VDMNat1)\<rparr>)"
+	inv_State S \<equiv>
+		
+		(((inv_VDMNat (x\<^sub>S S))) \<and> 
+		 ((inv_VDMReal (y\<^sub>S S)))
+		) \<and>
+		((x > (10::VDMNat1)) \<and> (y < (10::VDMNat1)))
+
+definition
+	init_State :: "State"
+where
+	init_State \<equiv>
+		(s = \<lparr>x\<^sub>S = (20::VDMNat1), y\<^sub>S = (5::VDMNat1)\<rparr>)
 
 
 
