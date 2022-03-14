@@ -1,4 +1,4 @@
-(* VDM to Isabelle Translation @2022-03-14T12:50:51.081Z
+(* VDM to Isabelle Translation @2022-03-14T14:33:11.723Z
    Copyright 2021, Leo Freitas, leo.freitas@newcastle.ac.uk
 
 in 'plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl' at line 1:8
@@ -38,7 +38,7 @@ definition
 	init_State :: "State"
 where
 	init_State \<equiv>
-		(s = \<lparr>x\<^sub>S = (20::VDMNat1), y\<^sub>S = (5::VDMNat1)\<rparr>)
+		 \<lparr>x\<^sub>S = (20::VDMNat1), y\<^sub>S = (5::VDMNat1)\<rparr>
 
 
 

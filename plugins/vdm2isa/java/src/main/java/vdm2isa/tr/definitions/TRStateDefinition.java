@@ -136,8 +136,9 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         sb.append(IsaToken.AND.toString());
 
         sb.append("\n\t\t");
+        // Think this needs to be processed so that it has the record with name of the variable
+        sb.append(invExpression.invTranslate());
         sb.append(invExpression.translate());
-
         sb.append("\n");
         return sb.toString();
     }
@@ -151,7 +152,9 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // 35   │     "init_S s \<equiv>
         sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
         // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
-        sb.append(initExpression.translate());
+        // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
+        String initRHS = initExpression.translate().substring(initExpression.translate().indexOf("=")+1,initExpression.translate().length()-1);
+        sb.append(initRHS);
         sb.append("\n");
         return sb.toString();
     }
