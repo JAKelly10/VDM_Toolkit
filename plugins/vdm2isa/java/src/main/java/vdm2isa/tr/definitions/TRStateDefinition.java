@@ -21,6 +21,10 @@ import vdm2isa.tr.types.TRRecordType;
 import vdm2isa.tr.types.TRType;
 
 public class TRStateDefinition extends TRAbstractTypedDefinition {
+
+    // did we forget to bring across inv information?
+    public final TRPattern invPattern;
+	public final TRExpression invExpression;
     public final TRPattern initPattern;
     public final TRExpression initExpression;
     public final TRExplicitFunctionDefinition initdef;
@@ -40,6 +44,8 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
 
         // will keep it simple and rely on the TRRecordType structure for the TCStateDefinition 
         // correspondent that will work nicely, given the record translation
+        TRPattern invPattern,
+        TRExpression invExpression,
         TRPattern initPattern,
         TRExpression initExpression, 
         TRExplicitFunctionDefinition initdef, 
@@ -48,6 +54,8 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         ) 
     {
         super(definition, location, comments, annotations, name, nameScope, used, excluded, recordType);
+        this.invPattern = invPattern;
+        this.invExpression = invExpression;
         this.initPattern = initPattern;
         this.initExpression = initExpression;
         this.initdef = initdef;
@@ -66,7 +74,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // * need to worry about state invariant implicit check see TRTypeDefinition for it  
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
-        TRNode.setup(recordType, statedefs, initPattern, initExpression, initdef); //initPattern, initExpression, initdef
+        TRNode.setup(recordType, statedefs, initPattern, initExpression, initdef, invPattern, invExpression);
     }
 
     @Override 
@@ -88,19 +96,47 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String translate()
     {
-        return super.translate() + recordTranslation()+ "\n" +"\n"+ translateInit();
+        return super.translate() + translateRecord()+ "\n" + translateInv() + "\n" + translateInit();
     }
 
-    public String recordTranslation(){
+    public String translateRecord(){
         StringBuilder sb = new StringBuilder();
-        sb.append("record "+ name+ " =");
+        sb.append("record State =");
+        // Don't know why there are copies of the elements here with trailing ~ added
         for(int i = 2; i<statedefs.size(); i+=2){
-            sb.append(statedefs.get(i).translate().replace('(', ' ').replace(')',' ').replace("::", " :: "));
+            // Hopefully some elegant way to remove outer brackets cause isabelle didn't like them in records in my test
+            sb.append(statedefs.get(i).translate().replace('(', ' ').replace(')',' '));
         }
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    public String translateInv(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("definition\n\tinv_State :: \"State \\<Rightarrow> bool\"\nwhere\n\tinv_State "+ name +" \\<equiv>\n\t\t");
+        // lots of brackets on this one and for some reason it seems to put the final one on a new line by its self
+        sb.append(recordType.invTranslate());
+        sb.append(IsaToken.SPACE.toString());
+        sb.append(IsaToken.AND.toString());
+
+        sb.append("\n\t\t");
+        sb.append(invExpression.translate());
+
+        sb.append("\n");
         return sb.toString();
     }
 
     public String translateInit(){
-        return initdef.translate();
+        // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
+        StringBuilder sb = new StringBuilder();
+        // 32   │ definition
+        // 33   │     init_S :: "S \<Rightarrow> bool"
+        // 34   │ where
+        // 35   │     "init_S s \<equiv>
+        sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
+        // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
+        sb.append(initExpression.translate());
+        sb.append("\n");
+        return sb.toString();
     }
 }

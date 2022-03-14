@@ -21,7 +21,7 @@ map TCQualifiedDefinition{location, comments, annotations, name, nameScope, used
 map TCImportedDefinition{location, comments, annotations, name, nameScope, used, excluded, def} to TRImportedDefinition(this, location, comments, annotations, name, nameScope, used, excluded, def);
 map TCRenamedDefinition{location, comments, annotations, name, used, excluded, def} to TRRenamedDefinition(this, location, comments, annotations, name, used, excluded, def);
 
-map TCStateDefinition{location, comments, annotations, name, nameScope, used, excluded, recordType, initPattern, initExpression, initdef, statedefs, canBeExecuted} to TRStateDefinition(this, location, comments, annotations, name, nameScope, used, excluded, recordType, initPattern, initExpression, initdef, statedefs, canBeExecuted);
+map TCStateDefinition{location, comments, annotations, name, nameScope, used, excluded, recordType, invPattern, invExpression, initPattern, initExpression, initdef, statedefs, canBeExecuted} to TRStateDefinition(this, location, comments, annotations, name, nameScope, used, excluded, recordType, invPattern, invExpression, initPattern, initExpression, initdef, statedefs, canBeExecuted);
 
 #############################################################################
 package com.fujitsu.vdmj.tc.expressions to vdm2isa.tr.expressions;
@@ -153,7 +153,7 @@ map TCVariableExpression{location, name, original, vardef, exptype} to TRVariabl
 map TCPreExpression{location, function, args, exptype} to TRPreExpression(location, this, function, args, exptype);
 map TCFuncInstantiationExpression{function, type, actualTypes, expdef, exptype} to TRFunctionInstantiationExpression(this, function, type, actualTypes, expdef, exptype);
 
-map TCStateInitExpression{exptype, state} to TRStateInitExpression(this, exptype, state);
+map TCStateInitExpression{exptype} to TRStateInitExpression(this, exptype);
 #############################################################################
 package com.fujitsu.vdmj.ast.lex to vdm2isa.lex;
 #############################################################################
