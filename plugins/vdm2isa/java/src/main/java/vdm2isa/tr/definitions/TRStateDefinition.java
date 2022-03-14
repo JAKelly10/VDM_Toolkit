@@ -4,11 +4,8 @@ import com.fujitsu.vdmj.lex.LexLocation;
 import com.fujitsu.vdmj.lex.Token;
 import com.fujitsu.vdmj.tc.definitions.TCDefinition;
 import com.fujitsu.vdmj.tc.definitions.TCStateDefinition;
-import com.fujitsu.vdmj.tc.definitions.TCTypeDefinition;
-import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
-import com.fujitsu.vdmj.tc.expressions.TCExpression;
 
 import vdm2isa.lex.IsaToken;
 import vdm2isa.lex.TRIsaVDMCommentList;
@@ -21,7 +18,6 @@ import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRStateInitExpression;
 import vdm2isa.tr.patterns.TRPattern;
 import vdm2isa.tr.types.TRRecordType;
-import vdm2isa.tr.types.TRType;
 
 public class TRStateDefinition extends TRAbstractTypedDefinition {
 
@@ -74,7 +70,16 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         super.setup();
         // anything specific to check?
         // * look into TRTypeDefinition for implicitly creating init expression if empty
+        // Do we have to have an init expression? If its empty is a valid translation not instead proving that there is at least one valid state
+        /*
+         *lemma State_exist:
+         *  "∃ state . inv_State state ⟶ true"
+         *  unfolding inv_State_def
+         */
+
         // * need to worry about state invariant implicit check see TRTypeDefinition for it  
+        // Can be handled in the actual translation as we need the implicit checks anyway
+
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
         if (!validInitExpression())
@@ -119,6 +124,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         StringBuilder sb = new StringBuilder();
         sb.append("record State =");
         // Don't know why there are copies of the elements here with trailing ~ added
+        // You got any idea cause I still don't get the duplication
         for(int i = 2; i<statedefs.size(); i+=2){
             // Hopefully some elegant way to remove outer brackets cause isabelle didn't like them in records in my test
             sb.append(statedefs.get(i).translate().replace('(', ' ').replace(')',' '));
@@ -132,30 +138,36 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         sb.append("definition\n\tinv_State :: \"State \\<Rightarrow> bool\"\nwhere\n\tinv_State "+ name +" \\<equiv>\n\t\t");
         // lots of brackets on this one and for some reason it seems to put the final one on a new line by its self
         sb.append(recordType.invTranslate());
-        sb.append(IsaToken.SPACE.toString());
-        sb.append(IsaToken.AND.toString());
 
-        sb.append("\n\t\t");
-        // Think this needs to be processed so that it has the record with name of the variable
-        sb.append(invExpression.invTranslate());
-        sb.append(invExpression.translate());
+        if(invExpression != null){
+            sb.append(IsaToken.SPACE.toString());
+            sb.append(IsaToken.AND.toString());
+
+            sb.append("\n\t\t");
+            // Think this needs to be processed so that it has the record with name of the variable
+            sb.append(invExpression.translate());
+        }
         sb.append("\n");
         return sb.toString();
     }
 
     public String translateInit(){
-        // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
-        StringBuilder sb = new StringBuilder();
-        // 32   │ definition
-        // 33   │     init_S :: "S \<Rightarrow> bool"
-        // 34   │ where
-        // 35   │     "init_S s \<equiv>
-        sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
-        // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
-        // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
-        String initRHS = initExpression.translate().substring(initExpression.translate().indexOf("=")+1,initExpression.translate().length()-1);
-        sb.append(initRHS);
-        sb.append("\n");
-        return sb.toString();
+        if(initExpression != null){
+            // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
+            StringBuilder sb = new StringBuilder();
+            // 32   │ definition
+            // 33   │     init_S :: "S \<Rightarrow> bool"
+            // 34   │ where
+            // 35   │     "init_S s \<equiv>
+            sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
+            // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
+            // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
+            String initRHS = initExpression.translate().substring(initExpression.translate().indexOf("=")+1,initExpression.translate().length()-1);
+            sb.append(initRHS);
+            sb.append("\n");
+            return sb.toString();
+        } else {
+            return "";
+        }
     }
 }
