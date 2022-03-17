@@ -64,8 +64,8 @@ mvn clean install
 cd $VDMJTK_HOME/plugins/annotations/witness
 mvn clean install
 
-#cd $VDMJTK_HOME/plugins/vdm2isa/java
-#mvn clean install
+cd $VDMJTK_HOME/plugins/vdm2isa/java
+mvn clean install
 
 vdmj -v
 

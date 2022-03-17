@@ -120,7 +120,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String translate()
     {
-        return super.translate() + recordType.tldTranslate()+ "\n" + recordType.translateSpecTLD() + "\n" + initdef.translate() + "\n this has actually run?";
+        return super.translate() + recordType.translateTypeTLD()+ "\n" + recordType.translateSpecTLD() + "\n" + initdef.translate() + "\n this has actually";
     }
 
     // public String translateInv(){
