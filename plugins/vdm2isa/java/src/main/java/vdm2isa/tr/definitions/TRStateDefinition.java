@@ -120,44 +120,44 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String translate()
     {
-        return super.translate() + recordType.tldTranslate()+ "\n" + recordType.translateSpecTLD() + "\n" + initdef.translate();
+        return super.translate() + recordType.tldTranslate()+ "\n" + recordType.translateSpecTLD() + "\n" + initdef.translate() + "\n this has actually run?";
     }
 
-    public String translateInv(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("definition\n\tinv_State :: \"State \\<Rightarrow> bool\"\nwhere\n\tinv_State "+ name +" \\<equiv>\n\t\t");
-        // lots of brackets on this one and for some reason it seems to put the final one on a new line by its self
-        sb.append(recordType.invTranslate());
+    // public String translateInv(){
+    //     StringBuilder sb = new StringBuilder();
+    //     sb.append("definition\n\tinv_State :: \"State \\<Rightarrow> bool\"\nwhere\n\tinv_State "+ name +" \\<equiv>\n\t\t");
+    //     // lots of brackets on this one and for some reason it seems to put the final one on a new line by its self
+    //     sb.append(recordType.invTranslate());
 
-        if(invExpression != null){
-            sb.append(IsaToken.SPACE.toString());
-            sb.append(IsaToken.AND.toString());
+    //     if(invExpression != null){
+    //         sb.append(IsaToken.SPACE.toString());
+    //         sb.append(IsaToken.AND.toString());
 
-            sb.append("\n\t\t");
-            // Think this needs to be processed so that it has the record with name of the variable
-            sb.append(invExpression.translate());
-        }
-        sb.append("\n");
-        return sb.toString();
-    }
+    //         sb.append("\n\t\t");
+    //         // Think this needs to be processed so that it has the record with name of the variable
+    //         sb.append(invExpression.translate());
+    //     }
+    //     sb.append("\n");
+    //     return sb.toString();
+    // }
 
-    public String translateInit(){
-        if(initExpression != null){
-            // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
-            StringBuilder sb = new StringBuilder();
-            // 32   │ definition
-            // 33   │     init_S :: "S \<Rightarrow> bool"
-            // 34   │ where
-            // 35   │     "init_S s \<equiv>
-            sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
-            // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
-            // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
-            String initRHS = initExpression.right.translate();
-            sb.append(initExpression.right.translate());
-            sb.append("\n");
-            return sb.toString();
-        } else {
-            return "";
-        }
-    }
+    // public String translateInit(){
+    //     if(initExpression != null){
+    //         // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
+    //         StringBuilder sb = new StringBuilder();
+    //         // 32   │ definition
+    //         // 33   │     init_S :: "S \<Rightarrow> bool"
+    //         // 34   │ where
+    //         // 35   │     "init_S s \<equiv>
+    //         sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
+    //         // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
+    //         // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
+    //         String initRHS = initExpression.right.translate();
+    //         sb.append(initExpression.right.translate());
+    //         sb.append("\n");
+    //         return sb.toString();
+    //     } else {
+    //         return "";
+    //     }
+    // }
 }
