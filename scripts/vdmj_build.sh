@@ -58,14 +58,14 @@ cd $VDMJTK_HOME
 git pull
 
 #@TODO make these into POM packaging files?
-cd $VDMJTK_HOME/annotations/Annotations3
+cd $VDMJTK_HOME/plugins/annotations/
 mvn clean install
 
-cd $VDMJTK_HOME/annotations/witness
+cd $VDMJTK_HOME/plugins/annotations/witness
 mvn clean install
 
-cd $VDMJTK_HOME/plugins/vdm2isa/java
-mvn clean install
+#cd $VDMJTK_HOME/plugins/vdm2isa/java
+#mvn clean install
 
 vdmj -v
 

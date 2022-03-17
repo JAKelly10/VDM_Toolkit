@@ -71,11 +71,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // anything specific to check?
         // * look into TRTypeDefinition for implicitly creating init expression if empty
         // Do we have to have an init expression? If its empty is a valid translation not instead proving that there is at least one valid state
-        /*
-         *lemma State_exist:
-         *  "∃ state . inv_State state ⟶ true"
-         *  unfolding inv_State_def
-         */
+        
 
         // * need to worry about state invariant implicit check see TRTypeDefinition for it  
         // Can be handled in the actual translation as we need the implicit checks anyway
@@ -124,20 +120,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String translate()
     {
-        return super.translate() + translateRecord()+ "\n" + translateInv() + "\n" + translateInit();
-    }
-
-    public String translateRecord(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("record State =");
-        // Don't know why there are copies of the elements here with trailing ~ added
-        // You got any idea cause I still don't get the duplication
-        for(int i = 2; i<statedefs.size(); i+=2){
-            // Hopefully some elegant way to remove outer brackets cause isabelle didn't like them in records in my test
-            sb.append(statedefs.get(i).translate().replace('(', ' ').replace(')',' '));
-        }
-        sb.append("\n");
-        return sb.toString();
+        return super.translate() + recordType.tldTranslate()+ "\n" + recordType.translateSpecTLD() + "\n" + initdef.translate();
     }
 
     public String translateInv(){
@@ -169,8 +152,8 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
             sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
             // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
             // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
-            String initRHS = initExpression.translate().substring(initExpression.translate().indexOf("=")+1,initExpression.translate().length()-1);
-            sb.append(initRHS);
+            String initRHS = initExpression.right.translate();
+            sb.append(initExpression.right.translate());
             sb.append("\n");
             return sb.toString();
         } else {

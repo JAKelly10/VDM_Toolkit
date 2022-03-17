@@ -15,14 +15,14 @@ import vdm2isa.tr.types.TRType;
 
 public class TRStateInitExpression extends TRExpression {
 
-    //private TRStateDefinition state;
+    private TRStateDefinition state;
 
     //This has no access to information as in VDMJ it is purely used as a type checker and nothing else. 
     //All of the logic is in StateDefinition
     // trying to do the logic here seems like it is going to lead to issues.
-    public TRStateInitExpression(TCStateInitExpression tc, TRType exptype) {
+    public TRStateInitExpression(TCStateInitExpression tc, TRType exptype, TRStateDefinition state) {
         super(tc != null && tc.location != null ? tc.location : LexLocation.ANY, (TCExpression)tc, exptype);
-        //this.state = state;
+        this.state = state;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class TRStateInitExpression extends TRExpression {
 
     @Override
     public String translate() {
-        return "init!";
+        return state.getInitExpression().translate();
     }
 
 }
