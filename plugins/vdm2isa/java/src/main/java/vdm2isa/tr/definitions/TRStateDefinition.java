@@ -82,6 +82,59 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
 
         if (!validInitExpression()){
             report(IsaErrorMessage.VDMSL_INVALID_STATE_INIT_1P, name);
+        } else {
+            TRExplicitFunctionDefinition ninitdef = new TRExplicitFunctionDefinition(
+                // TCExplicitFunctionDefinition definition,
+                initdef.getVDMDefinition(), // this one
+                // TRIsaVDMCommentList comments,
+                initdef.comments,
+                // TRAnnotationList annotations,
+                initdef.annotations,
+                // TCNameToken name,
+                initdef.name,
+                // NameScope nameScope, 
+                initdef.nameScope,
+                // boolean used, 
+                initdef.used,
+                // boolean excluded,
+                initdef.excluded,
+                // TCNameList typeParams,
+                initdef.typeParams, 
+                // TRFunctionType type,
+                initdef.type,
+                // TRPatternListList paramPatternList, 
+                initdef.paramPatternList,
+                // TRExpression body,
+                initdef.body,
+                // TRExpression precondition,
+                initdef.precondition,
+                // TRExpression postcondition, 
+                initdef.postcondition,
+                // boolean typeInvariant, 
+                false, //initdef.typeInvariant, // this one
+                // TRExpression measureExp,
+                initdef.measureExp,
+                // boolean isCurried, 
+                false, //initdef.isCurried, // this one
+                // TRExplicitFunctionDefinition predef,
+                initdef.predef,
+                // TRExplicitFunctionDefinition postdef,
+                initdef.postdef,
+                // TRDefinitionListList paramDefinitionList,
+                initdef.paramDefinitionList,
+                // boolean recursive,
+                initdef.recursive,
+                // boolean isUndefined,
+                initdef.isUndefined,
+                // TRType actualResult,
+                initdef.actualResult,
+                // TRType expectedResult
+                initdef.expectedResult,
+
+                false
+            );
+            //TRNode.setup(ninitdef);
+            System.out.println(ninitdef.toString());
         }
         TRNode.setup(recordType, initPattern, initExpression, initdef, statedefs);
     }
