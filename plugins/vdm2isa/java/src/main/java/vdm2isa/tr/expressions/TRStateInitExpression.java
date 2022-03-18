@@ -48,7 +48,11 @@ public class TRStateInitExpression extends TRExpression {
 
     @Override
     public String translate() {
-        return state.getInitExpression().translate();
+        if(IsaToken.from(state.getInitExpression().op).equals(IsaToken.EQUALS)){
+            return state.getInitExpression().right.translate();
+        }else{
+            return state.getInitExpression().translate();
+       }
     }
 
 }

@@ -78,13 +78,12 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
 
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
-<<<<<<< HEAD
         TRNode.setup(recordType, statedefs, initPattern, initExpression, initdef, invPattern, invExpression);
-=======
-        if (!validInitExpression())
+
+        if (!validInitExpression()){
             report(IsaErrorMessage.VDMSL_INVALID_STATE_INIT_1P, name);
+        }
         TRNode.setup(recordType, initPattern, initExpression, initdef, statedefs);
->>>>>>> refs/rewritten/merging-into-most-recent-branch
     }
 
     private boolean validInitExpression()
@@ -97,14 +96,11 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     public String toString()
     {
         return super.toString();
-<<<<<<< HEAD
-=======
     }
 
     public TRBinaryExpression getInitExpression()
     {
         return (TRBinaryExpression)initExpression;
->>>>>>> refs/rewritten/merging-into-most-recent-branch
     }
 
     @Override
@@ -120,7 +116,8 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     @Override 
     public String translate()
     {
-        return super.translate() + recordType.translateTypeTLD()+ "\n" + recordType.translateSpecTLD() + "\n" + initdef.translate() + "\n this has actually";
+        return super.translate() + recordType.translateTypeTLD() + 
+        recordType.translateSpecTLD() + translateInit();
     }
 
     // public String translateInv(){
@@ -141,23 +138,33 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
     //     return sb.toString();
     // }
 
-    // public String translateInit(){
-    //     if(initExpression != null){
-    //         // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
-    //         StringBuilder sb = new StringBuilder();
-    //         // 32   │ definition
-    //         // 33   │     init_S :: "S \<Rightarrow> bool"
-    //         // 34   │ where
-    //         // 35   │     "init_S s \<equiv>
-    //         sb.append("definition\n\tinit_State :: \"State\"\nwhere\n\tinit_State \\<equiv>\n\t\t");
-    //         // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
-    //         // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
-    //         String initRHS = initExpression.right.translate();
-    //         sb.append(initExpression.right.translate());
-    //         sb.append("\n");
-    //         return sb.toString();
-    //     } else {
-    //         return "";
-    //     }
-    // }
+    public String translateInit(){
+        if(initExpression instanceof TRBinaryExpression){
+            // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
+            StringBuilder sb = new StringBuilder();
+            sb.append(IsaToken.DEFINITION.toString());
+            sb.append("\n\t");
+            sb.append("init_" + name);
+            sb.append(IsaToken.SPACE.toString());
+            sb.append(IsaToken.TYPEOF.toString());
+            sb.append(IsaToken.SPACE.toString());
+            sb.append(IsaToken.ISAQUOTE.toString());
+            sb.append(name);
+            sb.append(IsaToken.ISAQUOTE.toString());
+            sb.append(IsaToken.SPACE.toString());
+            //sb.append(IsaToken.WHERE.toString());
+            sb.append("\nwhere\n\t");
+            sb.append("init_" + name);
+            sb.append(IsaToken.SPACE.toString());
+            sb.append(IsaToken.EQUALSEQUALS.toString());
+            sb.append("\n\t\t");
+            // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
+            // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
+            sb.append(getInitExpression().right.translate());
+            sb.append("\n");
+            return sb.toString();
+        } else {
+            return initdef.translate();
+        }
+    }
 }
