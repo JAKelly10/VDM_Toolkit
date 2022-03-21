@@ -10,18 +10,25 @@ import com.fujitsu.vdmj.typechecker.NameScope;
 import vdm2isa.lex.IsaToken;
 import vdm2isa.lex.TRIsaVDMCommentList;
 import vdm2isa.messages.IsaErrorMessage;
+import vdm2isa.messages.IsaInfoMessage;
 import vdm2isa.tr.TRNode;
 import vdm2isa.tr.annotations.TRAnnotationList;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
+import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
+import vdm2isa.tr.definitions.TRSpecificationKind;
 import vdm2isa.tr.expressions.TRBinaryExpression;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRStateInitExpression;
 import vdm2isa.tr.patterns.TRPattern;
+import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRRecordType;
+import vdm2isa.tr.types.TRInvariantType;
+import vdm2isa.tr.types.TRFunctionType;
+import vdm2isa.tr.patterns.TRPatternListList;
+import vdm2isa.tr.patterns.TRBasicPattern;
 
 public class TRStateDefinition extends TRAbstractTypedDefinition {
 
-    // did we forget to bring across inv information?
     public final TRPattern invPattern;
 	public final TRExpression invExpression;
     public final TRPattern initPattern;
@@ -73,69 +80,27 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         // Do we have to have an init expression? If its empty is a valid translation not instead proving that there is at least one valid state
         
 
-        // * need to worry about state invariant implicit check see TRTypeDefinition for it  
-        // Can be handled in the actual translation as we need the implicit checks anyway
-
         // * arguably you could perhaps think of extending TRTypeDefinition 
 
         TRNode.setup(recordType, statedefs, initPattern, initExpression, initdef, invPattern, invExpression);
 
         if (!validInitExpression()){
             report(IsaErrorMessage.VDMSL_INVALID_STATE_INIT_1P, name);
-        } else {
-            TRExplicitFunctionDefinition ninitdef = new TRExplicitFunctionDefinition(
-                // TCExplicitFunctionDefinition definition,
-                initdef.getVDMDefinition(), // this one
-                // TRIsaVDMCommentList comments,
-                initdef.comments,
-                // TRAnnotationList annotations,
-                initdef.annotations,
-                // TCNameToken name,
-                initdef.name,
-                // NameScope nameScope, 
-                initdef.nameScope,
-                // boolean used, 
-                initdef.used,
-                // boolean excluded,
-                initdef.excluded,
-                // TCNameList typeParams,
-                initdef.typeParams, 
-                // TRFunctionType type,
-                initdef.type,
-                // TRPatternListList paramPatternList, 
-                initdef.paramPatternList,
-                // TRExpression body,
-                initdef.body,
-                // TRExpression precondition,
-                initdef.precondition,
-                // TRExpression postcondition, 
-                initdef.postcondition,
-                // boolean typeInvariant, 
-                false, //initdef.typeInvariant, // this one
-                // TRExpression measureExp,
-                initdef.measureExp,
-                // boolean isCurried, 
-                false, //initdef.isCurried, // this one
-                // TRExplicitFunctionDefinition predef,
-                initdef.predef,
-                // TRExplicitFunctionDefinition postdef,
-                initdef.postdef,
-                // TRDefinitionListList paramDefinitionList,
-                initdef.paramDefinitionList,
-                // boolean recursive,
-                initdef.recursive,
-                // boolean isUndefined,
-                initdef.isUndefined,
-                // TRType actualResult,
-                initdef.actualResult,
-                // TRType expectedResult
-                initdef.expectedResult,
+        } 
 
-                false
-            );
-            //TRNode.setup(ninitdef);
-            System.out.println(ninitdef.toString());
+        if(needsImplicitlyGeneratedUndeclaredSpecification()){
+            System.out.println("Needs spec generated");
+            TRType paramType = ((TRInvariantType)recordType).copy(false);
+            TRFunctionType invType = TRFunctionType.getInvariantType(paramType);
+            TRPatternListList parameters = TRPatternListList.newPatternListList(TRBasicPattern.dummyPattern(location, false));
+            
+            recordType.setInvariantDefinition(TRExplicitFunctionDefinition.createUndeclaredSpecification(
+                name, nameScope, used, excluded, null, invType, false , parameters, 
+                new TRDefinitionListList(), TRSpecificationKind.INV
+            ));
+
         }
+
         TRNode.setup(recordType, initPattern, initExpression, initdef, statedefs);
     }
 
@@ -144,6 +109,11 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         return initExpression instanceof TRBinaryExpression && 
             IsaToken.from(((TRBinaryExpression)initExpression).op).equals(IsaToken.EQUALS);
     }
+
+    protected boolean needsImplicitlyGeneratedUndeclaredSpecification()
+	{
+		return this.invPattern == null && this.invExpression == null;
+	}
 
     @Override 
     public String toString()
@@ -173,28 +143,13 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         recordType.translateSpecTLD() + translateInit();
     }
 
-    // public String translateInv(){
-    //     StringBuilder sb = new StringBuilder();
-    //     sb.append("definition\n\tinv_State :: \"State \\<Rightarrow> bool\"\nwhere\n\tinv_State "+ name +" \\<equiv>\n\t\t");
-    //     // lots of brackets on this one and for some reason it seems to put the final one on a new line by its self
-    //     sb.append(recordType.invTranslate());
-
-    //     if(invExpression != null){
-    //         sb.append(IsaToken.SPACE.toString());
-    //         sb.append(IsaToken.AND.toString());
-
-    //         sb.append("\n\t\t");
-    //         // Think this needs to be processed so that it has the record with name of the variable
-    //         sb.append(invExpression.translate());
-    //     }
-    //     sb.append("\n");
-    //     return sb.toString();
-    // }
-
     public String translateInit(){
+        if(initExpression == null){
+            return "";
+        }
         if(initExpression instanceof TRBinaryExpression){
-            // annoyingly initdefs actually returns the comments shown below which gives it a incorrect definition of the init function.
             StringBuilder sb = new StringBuilder();
+            sb.append(initdef.translatePreamble());
             sb.append(IsaToken.DEFINITION.toString());
             sb.append("\n\t");
             sb.append("init_" + name);
@@ -205,14 +160,14 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
             sb.append(name);
             sb.append(IsaToken.ISAQUOTE.toString());
             sb.append(IsaToken.SPACE.toString());
-            //sb.append(IsaToken.WHERE.toString());
+            sb.append(this.tldIsaComment());
             sb.append("\nwhere\n\t");
             sb.append("init_" + name);
             sb.append(IsaToken.SPACE.toString());
             sb.append(IsaToken.EQUALSEQUALS.toString());
             sb.append("\n\t\t");
-            // need to work out how to get the right hand side only of this expression as this will then always work as long as the expression can be translated
-            // Hacky way to get RHS of expression probably should change to a better way using the parse tree.1
+            sb.append(IsaToken.comment(IsaInfoMessage.VDM_EXPLICIT_FUNCTION_USER_DEFINED_BODY_1P.format("init_"+name.toString()), getFormattingSeparator()));
+            sb.append("\t");
             sb.append(getInitExpression().right.translate());
             sb.append("\n");
             return sb.toString();

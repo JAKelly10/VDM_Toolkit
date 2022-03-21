@@ -19,7 +19,6 @@ public class TRStateInitExpression extends TRExpression {
 
     //This has no access to information as in VDMJ it is purely used as a type checker and nothing else. 
     //All of the logic is in StateDefinition
-    // trying to do the logic here seems like it is going to lead to issues.
     public TRStateInitExpression(TCStateInitExpression tc, TRType exptype, TRStateDefinition state) {
         super(tc != null && tc.location != null ? tc.location : LexLocation.ANY, (TCExpression)tc, exptype);
         this.state = state;
