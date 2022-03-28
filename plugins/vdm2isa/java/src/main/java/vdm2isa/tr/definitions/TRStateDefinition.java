@@ -89,7 +89,6 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         } 
 
         if(needsImplicitlyGeneratedUndeclaredSpecification()){
-            System.out.println("Needs spec generated");
             TRType paramType = ((TRInvariantType)recordType).copy(false);
             TRFunctionType invType = TRFunctionType.getInvariantType(paramType);
             TRPatternListList parameters = TRPatternListList.newPatternListList(TRBasicPattern.dummyPattern(location, false));
@@ -148,6 +147,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
             return "";
         }
         if(initExpression instanceof TRBinaryExpression){
+            // replace with a modification of initdef so it auto generates this?
             StringBuilder sb = new StringBuilder();
             sb.append(initdef.translatePreamble());
             sb.append(IsaToken.DEFINITION.toString());
