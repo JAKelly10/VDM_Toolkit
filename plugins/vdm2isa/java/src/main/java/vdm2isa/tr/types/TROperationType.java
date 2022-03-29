@@ -13,7 +13,6 @@ import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.messages.IsaInfoMessage;
 
 import vdm2isa.tr.definitions.TRDefinitionList;
-
 import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRAbstractInnerTypedType;
 import vdm2isa.tr.types.TRTypeList;

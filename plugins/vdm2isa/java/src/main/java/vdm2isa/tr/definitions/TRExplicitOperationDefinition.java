@@ -13,6 +13,8 @@ import vdm2isa.lex.TRIsaVDMCommentList;
 import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.messages.IsaInfoMessage;
 
+import vdm2isa.tr.TRNode;
+
 import vdm2isa.tr.annotations.TRAnnotationList;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
@@ -81,11 +83,13 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         NameScope nameScope, 
         boolean used, 
         boolean excluded,
+
+        // For this class
         TRPatternList parameterPatterns,
         TRDefinitionList paramDefinitions,
         TROperationType type,
         TRTypeList unresolved,
-        //TRStatement body,
+        // TRStatement body,
         TRExpression precondition,
         TRExpression postcondition, 
         TRExplicitFunctionDefinition predef,
@@ -108,21 +112,31 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 
     }
 
+    @Override
+    public void setup(){
+        super.setup();
+        TRNode.setup(predef, postdef, precondition, postcondition, type, state, paramDefinitions, parameterPatterns, unresolved);
+    }
 
     @Override
     public IsaToken isaToken() {
         return IsaToken.EOF;
     }
 
-
     @Override
     public <R, S> R apply(TRDefinitionVisitor<R, S> visitor, S arg) {
         return visitor.caseExplicitOperationDefinition(this, arg);
     }
 
-
+    @Override
     public String translate() {
         return "Operation";
     }
     
+    @Override 
+    public String toString()
+    {
+        return super.toString();
+    }
+
 }
