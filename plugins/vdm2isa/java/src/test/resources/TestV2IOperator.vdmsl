@@ -1,0 +1,20 @@
+module TestV2IOperator 
+exports all
+definitions 
+
+state S of  
+   x : nat 
+   y : real
+inv mk_S(x,y) == x > 15 and y < 5
+init s == s = mk_S(25,0)
+end
+
+operations
+
+test: nat1 ==> ()
+test(inc) == 
+   (x := x + inc)
+post x~ < x
+
+
+end TestV2IOperator

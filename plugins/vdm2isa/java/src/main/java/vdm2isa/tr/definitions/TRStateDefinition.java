@@ -127,7 +127,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
 
     @Override
     public <R, S> R apply(TRDefinitionVisitor<R, S> visitor, S arg) {
-        return visitor.createStateDefinition(this, arg);
+        return visitor.caseStateDefinition(this, arg);
     }
 
     @Override
@@ -147,7 +147,9 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
             return "";
         }
         if(initExpression instanceof TRBinaryExpression){
+            //@JK
             // replace with a modification of initdef so it auto generates this?
+            // Use initdefs information with a update param and return
             StringBuilder sb = new StringBuilder();
             sb.append(initdef.translatePreamble());
             sb.append(IsaToken.DEFINITION.toString());
