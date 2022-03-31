@@ -4,6 +4,7 @@ import com.fujitsu.vdmj.lex.LexLocation;
 import com.fujitsu.vdmj.lex.Token;
 import com.fujitsu.vdmj.tc.definitions.TCDefinition;
 import com.fujitsu.vdmj.tc.definitions.TCStateDefinition;
+import com.fujitsu.vdmj.tc.types.TCFunctionType;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
 
@@ -16,14 +17,17 @@ import vdm2isa.tr.annotations.TRAnnotationList;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
 import vdm2isa.tr.definitions.TRSpecificationKind;
+import vdm2isa.tr.definitions.TRDefinitionListList;
 import vdm2isa.tr.expressions.TRBinaryExpression;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRStateInitExpression;
 import vdm2isa.tr.patterns.TRPattern;
+import vdm2isa.tr.patterns.TRPatternListList;
 import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRRecordType;
 import vdm2isa.tr.types.TRInvariantType;
 import vdm2isa.tr.types.TRFunctionType;
+import vdm2isa.tr.types.TRTypeList;
 import vdm2isa.tr.patterns.TRPatternListList;
 import vdm2isa.tr.patterns.TRBasicPattern;
 
@@ -148,33 +152,45 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         }
         if(initExpression instanceof TRBinaryExpression){
             //@JK
-            // replace with a modification of initdef so it auto generates this?
-            // Use initdefs information with a update param and return
-            StringBuilder sb = new StringBuilder();
-            sb.append(initdef.translatePreamble());
-            sb.append(IsaToken.DEFINITION.toString());
-            sb.append("\n\t");
-            sb.append("init_" + name);
-            sb.append(IsaToken.SPACE.toString());
-            sb.append(IsaToken.TYPEOF.toString());
-            sb.append(IsaToken.SPACE.toString());
-            sb.append(IsaToken.ISAQUOTE.toString());
-            sb.append(name);
-            sb.append(IsaToken.ISAQUOTE.toString());
-            sb.append(IsaToken.SPACE.toString());
-            sb.append(this.tldIsaComment());
-            sb.append("\nwhere\n\t");
-            sb.append("init_" + name);
-            sb.append(IsaToken.SPACE.toString());
-            sb.append(IsaToken.EQUALSEQUALS.toString());
-            sb.append("\n\t\t");
-            sb.append(IsaToken.comment(IsaInfoMessage.VDM_EXPLICIT_FUNCTION_USER_DEFINED_BODY_1P.format("init_"+name.toString()), getFormattingSeparator()));
-            sb.append("\t");
-            sb.append(getInitExpression().right.translate());
-            sb.append("\n");
-            return sb.toString();
+            // Check use of ninitdef and is it defined correctly as it does generate the correct output
+            TRType result = ((TRInvariantType)recordType).copy(false);
+
+            TRFunctionType func = new TRFunctionType(
+                (TCFunctionType)initdef.type.getVDMType(),
+                initdef.type.getDefinitions(),
+                new TRTypeList(),
+                initdef.type.partial, 
+                result
+            );
+
+            TRExplicitFunctionDefinition ninitdef = TRExplicitFunctionDefinition.newExplicitFunctionDefinition(
+                initdef.comments,
+                initdef.annotations,
+                initdef.name,
+                initdef.nameScope, 
+                initdef.used, 
+                initdef.excluded,
+                initdef.typeParams, 
+                func,
+                new TRPatternListList(), 
+                getInitExpression().right,
+                initdef.precondition,
+                initdef.postcondition, 
+                false, 
+                initdef.measureExp,
+                false, 
+                initdef.predef,
+                initdef.postdef,
+                new TRDefinitionListList(),
+                initdef.recursive,
+                initdef.isUndefined,
+                result,
+                result
+            );
+            
+            return ninitdef.translate();
         } else {
-            return initdef.translate();
+            return "";
         }
     }
 }

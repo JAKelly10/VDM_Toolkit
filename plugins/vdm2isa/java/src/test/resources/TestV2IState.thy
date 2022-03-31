@@ -1,4 +1,4 @@
-(* VDM to Isabelle Translation @2022-03-28T14:53:07.005Z
+(* VDM to Isabelle Translation @2022-03-31T14:40:27.282049Z
    Copyright 2021, Leo Freitas, leo.freitas@newcastle.ac.uk
 
 in 'plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl' at line 1:8
@@ -42,16 +42,16 @@ where
 
 		
 
-\<comment>\<open>VDM source: init_S: (S +> bool)
-	init_S(s) ==
-init s == (s = mk_S(25, 0))\<close>
+\<comment>\<open>VDM source: init_S: (S -> bool)
+	init_S ==
+mk_S(25, 0)\<close>
 \<comment>\<open>in 'TestV2IState' (plugins/vdm2isa/java/src/test/resources/TestV2IState.vdmsl) at line 9:6\<close>
 definition
-	init_S :: "S" 
+	init_S :: "S"
 where
-	init_S \<equiv>
+	"init_S  \<equiv> 
 		\<comment>\<open>User defined body of init_S.\<close>
-		\<lparr>x\<^sub>S = (25::VDMNat1), y\<^sub>S = (0::VDMNat)\<rparr>
+		\<lparr>x\<^sub>S = (25::VDMNat1), y\<^sub>S = (0::VDMNat)\<rparr>"
 
 
 
