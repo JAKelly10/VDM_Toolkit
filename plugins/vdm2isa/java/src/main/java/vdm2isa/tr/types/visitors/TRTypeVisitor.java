@@ -23,6 +23,7 @@ import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRUnionType;
 import vdm2isa.tr.types.TRUnknownType;
 import vdm2isa.tr.types.TROperationType;
+import vdm2isa.tr.types.TRVoidType;
 
 /**
  * The base type for all TRType visitors. All methods, by default, call
@@ -115,6 +116,10 @@ public abstract class TRTypeVisitor<R, S>
     }
 
 	public R caseOperationType(TROperationType node, S arg) {
+        return caseType(node, arg);
+    }
+
+	public R caseVoidType(TRVoidType node, S arg) {
         return caseType(node, arg);
     }
 

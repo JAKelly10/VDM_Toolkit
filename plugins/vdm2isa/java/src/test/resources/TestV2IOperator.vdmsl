@@ -14,7 +14,7 @@ operations
 test: nat1 ==> ()
 test(inc) == 
    (x := x + inc)
-post x~ < x
+-- post x~ < x
 
 
 end TestV2IOperator

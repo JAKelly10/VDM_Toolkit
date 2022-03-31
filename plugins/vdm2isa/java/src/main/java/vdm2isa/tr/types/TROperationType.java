@@ -12,6 +12,7 @@ import vdm2isa.lex.TRIsaVDMCommentList;
 import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.messages.IsaInfoMessage;
 
+import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRDefinitionList;
 import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRAbstractInnerTypedType;
@@ -33,6 +34,17 @@ public class TROperationType extends TRAbstractInnerTypedType{
 	}
 
     @Override
+	public void setup()
+	{
+		super.setup();
+		setFormattingSeparator("\n\t");
+		// presume that all function types will be curried
+		TRNode.setup(parameters); 
+		parameters.setCurried(true);
+		//System.out.println(toString());
+	}
+
+    @Override
 	public <R, S> R apply(TRTypeVisitor<R, S> visitor, S arg)
 	{
 		return visitor.caseOperationType(this, arg);
@@ -40,7 +52,14 @@ public class TROperationType extends TRAbstractInnerTypedType{
     
     @Override
     public String translate(){
-        return "Operation translation";
+        StringBuilder sb = new StringBuilder();
+		sb.append(parameters.translate());
+		sb.append(IsaToken.SPACE.toString());
+		sb.append(isaToken().toString());
+		sb.append(IsaToken.SPACE.toString());
+		sb.append(getInnerType().translate());
+		return sb.toString();
+
     }
 
     @Override
@@ -56,7 +75,7 @@ public class TROperationType extends TRAbstractInnerTypedType{
 
     @Override
     public IsaToken isaToken() {
-        return IsaToken.EOF;
+        return IsaToken.TFUN;
     }
  
 

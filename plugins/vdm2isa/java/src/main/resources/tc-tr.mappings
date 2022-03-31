@@ -286,6 +286,7 @@ map TCBracketType{definitions, type} to TRBracketType(this, definitions, type);
 map TCParameterType{definitions, name, paramdef} to TRParameterType(this, definitions, name, paramdef);
 
 map TCOperationType{definitions, parameters, result, pure} to TROperationType(this, definitions, parameters, result, pure);
+map TCVoidType{definitions} to TRVoidType(this, definitions);
 
 #############################################################################
 # Classes that are not mapped

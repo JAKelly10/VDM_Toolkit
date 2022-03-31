@@ -54,28 +54,10 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 	public TRStateDefinition state;
 
 	private TRType actualResult = null;
-    //public boolean recursive = false;
 	public boolean isConstructor = false;
 	public TRTypeSet possibleExceptions = null;
 
-    // TCExplicitOperationDefinition, 
-    // TRIsaVDMCommentList, 
-    // TRAnnotationList,  
-    // TCNameToken, 
-    // NameScope, 
-    // boolean, 
-    // boolean, 
-    // TRPatternList, 
-    // TRDefinitionList, 
-    // TROperationType, 
-    // TRTypeList, 
-    // TRExpression, 
-    // TRExpression, 
-    // TRExplicitFunctionDefinition, 
-    // TRExplicitFunctionDefinition, 
-    // TRStateDefinition, 
-    // boolean
-    protected TRExplicitOperationDefinition(
+    public TRExplicitOperationDefinition(
         TCExplicitOperationDefinition definition,
         TRIsaVDMCommentList comments,
         TRAnnotationList annotations,
@@ -115,6 +97,7 @@ public class TRExplicitOperationDefinition extends TRDefinition {
     @Override
     public void setup(){
         super.setup();
+        setFormattingSeparator("\n\t");
         TRNode.setup(predef, postdef, precondition, postcondition, type, state, paramDefinitions, parameterPatterns, unresolved);
     }
 
@@ -130,7 +113,26 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 
     @Override
     public String translate() {
-        return "Operation";
+        StringBuilder sb = new StringBuilder();
+        // translate the precondition
+		if (predef != null) 
+		{
+			sb.append(predef.translate());
+			sb.append("\n");
+		}
+
+		// translate the postcondition
+		if (postdef != null)
+		{
+			sb.append(postdef.translate());
+			sb.append("\n");
+		}
+
+        sb.append(super.translate());
+        sb.append(parameterPatterns.translate());
+        sb.append(type.translate());
+        
+        return sb.toString();
     }
     
     @Override 
