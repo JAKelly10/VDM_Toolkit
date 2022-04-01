@@ -47,6 +47,8 @@ import vdm2isa.tr.expressions.TRUnaryExpression;
 import vdm2isa.tr.expressions.TRVDMLocalDefinitionListExpression;
 import vdm2isa.tr.expressions.TRVDMTestExpression;
 import vdm2isa.tr.expressions.TRVariableExpression;
+import vdm2isa.tr.expressions.TRPreOpExpression;
+import vdm2isa.tr.expressions.TRPostOpExpression;
 
 /**
  * The base type for all TRExpression visitors. All methods, by default, call
@@ -258,4 +260,12 @@ public abstract class TRExpressionVisitor<R, S>
     public R createStateInitExpression(TRStateInitExpression node, S arg) {
         return caseExpression(node, arg);
     }
+
+	public R casePreOpExpression(TRPreOpExpression node, S arg) {
+		return caseExpression(node, arg);
+	}
+
+	public R casePostOpExpression(TRPostOpExpression node, S arg) {
+		return caseExpression(node, arg);
+	}
 }

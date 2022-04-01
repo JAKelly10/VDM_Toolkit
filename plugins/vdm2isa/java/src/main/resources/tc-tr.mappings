@@ -156,6 +156,10 @@ map TCPreExpression{location, function, args, exptype} to TRPreExpression(locati
 map TCFuncInstantiationExpression{function, type, actualTypes, expdef, exptype} to TRFunctionInstantiationExpression(this, function, type, actualTypes, expdef, exptype);
 
 map TCStateInitExpression{exptype, state} to TRStateInitExpression(this, exptype, state);
+
+map TCPreOpExpression{location, exptype, opname, expression, state} to TRPreOpExpression(this, location, exptype, opname, expression, state);
+map TCPostOpExpression{location, exptype, opname, preexpression, postexpression, state} to TRPostOpExpression(this, location, exptype, opname, preexpression, postexpression, state);
+
 #############################################################################
 package com.fujitsu.vdmj.ast.lex to vdm2isa.lex;
 #############################################################################
