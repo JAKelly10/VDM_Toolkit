@@ -14,7 +14,12 @@ operations
 test: nat1 ==> ()
 test(inc) == 
    (x := x + inc)
--- post x~ < x
+ pre inc < 10 and x > 0
+ post x~ < x;
+
+ FMA_Floor: real*real ==> ()
+ FMA_Floor(M,A) == 
+   (y := y*M+A);
 
 
 end TestV2IOperator

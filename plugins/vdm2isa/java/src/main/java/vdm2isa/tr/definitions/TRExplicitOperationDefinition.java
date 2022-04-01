@@ -119,7 +119,18 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 		{
 			sb.append(predef.translate());
 			sb.append("\n");
-		}
+		} else {
+            TRFunctionType invType = TRFunctionType.getInvariantType(type);
+            TRPatternListList parameters = TRPatternListList.newPatternListList(TRBasicPattern.dummyPattern(location, false));
+            
+            predef = TRExplicitFunctionDefinition.createUndeclaredSpecification(
+                name, nameScope, used, excluded, null, invType, false , parameters, 
+                new TRDefinitionListList(), TRSpecificationKind.PRE
+            );
+
+            sb.append(predef.translate());
+			sb.append("\n");
+        }
 
 		// translate the postcondition
 		if (postdef != null)
