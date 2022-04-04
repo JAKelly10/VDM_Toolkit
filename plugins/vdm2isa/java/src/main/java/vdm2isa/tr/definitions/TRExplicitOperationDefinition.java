@@ -10,6 +10,8 @@ import com.fujitsu.vdmj.lex.LexLocation;
 
 import vdm2isa.lex.IsaToken;
 import vdm2isa.lex.TRIsaVDMCommentList;
+import vdm2isa.lex.IsaTemplates;
+import vdm2isa.lex.IsaItem;
 import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.messages.IsaInfoMessage;
 
@@ -34,6 +36,7 @@ import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRTypeList;
 import vdm2isa.tr.types.TRTypeSet;
 import vdm2isa.tr.types.TROperationType;
+import vdm2isa.tr.types.TRVoidType;
 
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 
@@ -140,11 +143,40 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 		}
 
         sb.append(super.translate());
-        sb.append(parameterPatterns.translate());
-        sb.append(type.translate());
+        
+        //@JK
+        // Replaces with newly definied parameters and parameter patterns that have the state included?
+        String fcnName     = name.getName();
+        String stateType = state.name.toString();
+		String fcnInType   = isConstantFunction() ? stateType : type.parameters.translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
+		String fcnOutType  = (type.getResultType() instanceof TRVoidType) ? stateType : 
+        type.getResultType().translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
+		
+        String fcnParams = translateParameters() + IsaToken.SPACE.toString() + stateType;
+
+        sb.append(IsaTemplates.translateDefinition(
+                //TODO not yet ideal, given multiple equations are possible, but okay for now. 
+                false ? IsaItem.FUNCTION : IsaItem.DEFINITION,
+                this.getLocation(), fcnName, fcnInType, fcnOutType, fcnParams, 
+                "Empty body", isLocal()));
         
         return sb.toString();
     }
+
+	protected String translateParameters()
+	{
+		// even for union pattern translate, we can "abosrb" the parameter name within the union case selection
+		// i.e. parameter name can be the same as the selected union parameter name without capturing it. 
+		boolean oldFreshness = parameterPatterns.setDummyFreshness(false, true);
+		String fcnParams   = parameterPatterns.translate();
+		parameterPatterns.setDummyFreshness(false,true);//oldFreshness, true);
+		return fcnParams;
+	}
+
+    protected boolean isConstantFunction()
+	{
+		return type.parameters.isEmpty();
+	}
     
     @Override 
     public String toString()
