@@ -33,6 +33,7 @@ import vdm2isa.tr.patterns.TRBasicPattern;
 
 public class TRStateDefinition extends TRAbstractTypedDefinition {
 
+    public static TRStateDefinition state;
     public final TRPattern invPattern;
 	public final TRExpression invExpression;
     public final TRPattern initPattern;
@@ -73,6 +74,7 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
         this.canBeExecuted = canBeExecuted; 
         // see similar exmaple in TRMapType etc. 
         this.recordType = recordType;   // super.type = this.recordType; needed for TR mapping 
+        TRStateDefinition.state = this;
     }
 
     @Override

@@ -120,6 +120,8 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         // translate the precondition
 		if (predef != null) 
 		{
+            System.out.println(predef.toString());
+            System.out.println(precondition.toString());
 			sb.append(predef.translate());
 			sb.append("\n");
 		} else {
@@ -130,12 +132,14 @@ public class TRExplicitOperationDefinition extends TRDefinition {
             // Is that possible to generate new type and params with the changes?
 
             TRFunctionType invType = TRFunctionType.getInvariantType(type);
-            TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns);
+            TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(state.invPattern));
             
             predef = TRExplicitFunctionDefinition.createUndeclaredSpecification(
-                name, nameScope, used, excluded, null, invType, true , parameters, 
+                name, nameScope, used, excluded, null, invType, false , parameters, 
                 new TRDefinitionListList(), TRSpecificationKind.PRE
             );
+
+            System.out.println(predef.toString());
 
             sb.append(predef.translate());
 			sb.append("\n");
@@ -155,8 +159,8 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         String fcnName     = name.getName();
         String stateType = state.name.toString();
 		String fcnInType   = isConstantFunction() ? stateType : type.parameters.translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
-		String fcnOutType  = (type.getResultType() instanceof TRVoidType) ? stateType : 
-        type.getResultType().translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
+		String fcnOutType  = type.getResultType().translate();
+        //(type.getResultType() instanceof TRVoidType) ? type.getResultType() : type.getResultType().translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
 		
         String fcnParams = translateParameters() + IsaToken.SPACE.toString() + stateType;
 

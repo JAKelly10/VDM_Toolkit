@@ -13,6 +13,7 @@ import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.messages.IsaInfoMessage;
 
 import vdm2isa.tr.definitions.TRDefinitionList;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRAbstractInnerTypedType;
 import vdm2isa.tr.types.TRTypeList;
@@ -36,18 +37,18 @@ public class TRVoidType extends TRType{
     @Override
     public String translate()
     {
-        return "()";
+        return TRStateDefinition.state.name.toString();
     }
 
     @Override
 	public String invTranslate(String varName) 
     {
-        return "()";
+        return "inv_" + TRStateDefinition.state.name.toString() + IsaToken.SPACE.toString() + varName;
     }
 
     protected String getInvTypeString()
     {
-        return "()";
+        return "inv_" + TRStateDefinition.state.name.toString();
     }
 
 
