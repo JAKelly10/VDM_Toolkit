@@ -151,8 +151,6 @@ public class TRStateDefinition extends TRAbstractTypedDefinition {
             return "";
         }
         if(initExpression instanceof TRBinaryExpression){
-            //@JK
-            // Check use of ninitdef and is it defined correctly as it does generate the correct output
             TRType result = ((TRInvariantType)recordType).copy(false);
 
             TRFunctionType func = new TRFunctionType(

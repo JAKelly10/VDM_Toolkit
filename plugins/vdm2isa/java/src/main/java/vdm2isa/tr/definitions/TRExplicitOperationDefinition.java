@@ -123,11 +123,17 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 			sb.append(predef.translate());
 			sb.append("\n");
 		} else {
+            //@JK
+            // I think it needs to have state ammended to parameters and the parameterPatterns
+            // and the return type in type and paramaters in type also ammended to remove the 
+            // void and add state. Otherwise it is adding a lot of difficulty to the code gen.
+            // Is that possible to generate new type and params with the changes?
+
             TRFunctionType invType = TRFunctionType.getInvariantType(type);
-            TRPatternListList parameters = TRPatternListList.newPatternListList(TRBasicPattern.dummyPattern(location, false));
+            TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns);
             
             predef = TRExplicitFunctionDefinition.createUndeclaredSpecification(
-                name, nameScope, used, excluded, null, invType, false , parameters, 
+                name, nameScope, used, excluded, null, invType, true , parameters, 
                 new TRDefinitionListList(), TRSpecificationKind.PRE
             );
 
