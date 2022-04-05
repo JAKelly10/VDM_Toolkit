@@ -130,6 +130,8 @@ public class TRExplicitOperationDefinition extends TRDefinition {
             // and the return type in type and paramaters in type also ammended to remove the 
             // void and add state. Otherwise it is adding a lot of difficulty to the code gen.
             // Is that possible to generate new type and params with the changes?
+            // I am really confused as to why it is not generating any body at all and think it 
+            // has something to do with the missing typeParams but I don't know how to find or make them
 
             TRFunctionType invType = TRFunctionType.getInvariantType(type);
             TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(state.invPattern));
