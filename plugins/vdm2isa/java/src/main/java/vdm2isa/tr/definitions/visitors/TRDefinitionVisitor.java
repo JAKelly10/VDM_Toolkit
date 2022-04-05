@@ -20,6 +20,7 @@ import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.definitions.TRTypeDefinition;
 import vdm2isa.tr.definitions.TRValueDefinition;
 import vdm2isa.tr.definitions.TRExplicitOperationDefinition;
+import vdm2isa.tr.definitions.TRImplicitOperationDefinition;
 
 /**
  * The base type for all TRDefinition visitors. All methods, by default, call
@@ -91,6 +92,10 @@ public abstract class TRDefinitionVisitor<R, S>
     }
 
     public R caseExplicitOperationDefinition(TRExplicitOperationDefinition node, S arg){
+        return caseDefinition(node, arg);
+    }
+
+    public R caseImplicitOperationDefinition(TRImplicitOperationDefinition node, S arg){
         return caseDefinition(node, arg);
     }
 

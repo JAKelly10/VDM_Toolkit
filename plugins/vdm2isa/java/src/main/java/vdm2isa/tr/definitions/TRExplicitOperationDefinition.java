@@ -61,6 +61,44 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 	public TRTypeSet possibleExceptions = null;
 
     public TRExplicitOperationDefinition(
+        TCDefinition definition,
+        TRIsaVDMCommentList comments,
+        TRAnnotationList annotations,
+        TCNameToken name,
+        NameScope nameScope, 
+        boolean used, 
+        boolean excluded,
+
+        // For this class
+        TRPatternList parameterPatterns,
+        TRDefinitionList paramDefinitions,
+        TROperationType type,
+        TRTypeList unresolved,
+        // TRStatement body,
+        TRExpression precondition,
+        TRExpression postcondition, 
+        TRExplicitFunctionDefinition predef,
+        TRExplicitFunctionDefinition postdef,
+        TRStateDefinition state,
+        boolean isConstructor,
+        boolean ignore
+    ) {
+        super(definition, name != null ? name.getLocation() : LexLocation.ANY, comments, annotations, name, nameScope, used, excluded);
+        this.parameterPatterns = parameterPatterns;
+        this.paramDefinitions = paramDefinitions;
+        this.type = type;
+		this.unresolved = unresolved;
+
+        this.precondition = precondition;
+        this.postcondition = postcondition;
+        this.predef = predef;
+        this.postdef = postdef;
+        this.state = state;
+        this.isConstructor = isConstructor;
+
+    }
+
+    public TRExplicitOperationDefinition(
         TCExplicitOperationDefinition definition,
         TRIsaVDMCommentList comments,
         TRAnnotationList annotations,
@@ -82,19 +120,29 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         TRStateDefinition state,
         boolean isConstructor
     ) {
-        super(definition, name != null ? name.getLocation() : LexLocation.ANY, comments, annotations, name, nameScope, used, excluded);
-        this.parameterPatterns = parameterPatterns;
-        this.paramDefinitions = paramDefinitions;
-        this.type = type;
-		this.unresolved = unresolved;
+        this(
+            (TCDefinition) definition,
+            comments,
+            annotations,
+            name,
+            nameScope, 
+            used, 
+            excluded,
 
-        this.precondition = precondition;
-        this.postcondition = postcondition;
-        this.predef = predef;
-        this.postdef = postdef;
-        this.state = state;
-        this.isConstructor = isConstructor;
-
+            // For this class
+            parameterPatterns,
+            paramDefinitions,
+            type,
+            unresolved,
+            // TRStatement body,
+            precondition,
+            postcondition, 
+            predef,
+            postdef,
+            state,
+            isConstructor,
+            false
+        );
     }
 
     @Override
