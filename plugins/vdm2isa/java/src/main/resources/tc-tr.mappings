@@ -26,7 +26,6 @@ map TCStateDefinition{location, comments, annotations, name, nameScope, used, ex
 map TCExplicitOperationDefinition{comments, annotations, name, nameScope, used, excluded, parameterPatterns, paramDefinitions, type, unresolved, precondition, postcondition, predef, postdef, state, isConstructor} to TRExplicitOperationDefinition(this, comments, annotations, name, nameScope, used, excluded, parameterPatterns, paramDefinitions, type, unresolved, precondition, postcondition, predef, postdef, state, isConstructor);
 map TCImplicitOperationDefinition{comments, annotations, name, nameScope, used, excluded, parameterPatterns, type, unresolved, precondition, postcondition, predef, postdef, state} to TRImplicitOperationDefinition(this, comments, annotations, name, nameScope, used, excluded, parameterPatterns, type, unresolved, precondition, postcondition, predef, postdef, state);
 
-
 #############################################################################
 package com.fujitsu.vdmj.tc.expressions to vdm2isa.tr.expressions;
 #############################################################################
