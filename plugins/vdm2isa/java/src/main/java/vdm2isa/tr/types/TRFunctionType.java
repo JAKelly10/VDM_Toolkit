@@ -22,6 +22,7 @@ import java.util.TreeSet;
 
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.types.TCFunctionType;
+import com.fujitsu.vdmj.tc.types.TCType;
 
 public class TRFunctionType extends TRAbstractInnerTypedType
 {
@@ -33,14 +34,20 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 	 * (i.e. ClassMapper requires the same field name, even though we percolate it through the AbstractInnerType hierarchy)
 	 */
 	private final TRType result;
-	
-	public TRFunctionType(TCFunctionType vdmType, TRDefinitionList definitions, TRTypeList parameters, boolean partial, TRType result)
+
+	public TRFunctionType(TCType vdmType, TRDefinitionList definitions, TRTypeList parameters, boolean partial, TRType result, boolean ignore)
 	{
 		// definitions are nonempty when the type defines an explicit function definition! 
 		super(vdmType, definitions, result);
 		this.parameters = parameters;
 		this.result = result;// never used! Needs to be here because of class mapping naming conventions!
 		this.partial = partial;
+	}
+	
+	public TRFunctionType(TCFunctionType vdmType, TRDefinitionList definitions, TRTypeList parameters, boolean partial, TRType result)
+	{
+		// definitions are nonempty when the type defines an explicit function definition! 
+		this(vdmType, definitions, parameters, partial, result, false);
 	}
 
 	@Override
@@ -93,7 +100,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 		else
         {
 			//TODO should the call be parameters.copy(true)?
-			result = new TRFunctionType(getVDMFunctionType(), definitions, parameters.copy(atTLD), partial, getInnerType().copy(true));
+			result = new TRFunctionType(getVDMFunctionType(), definitions, parameters.copy(atTLD), partial, getInnerType().copy(true), false);
 			TRNode.setup(result);
 			result.setAtTopLevelDefinition(atTLD);
 		}
@@ -103,6 +110,31 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 	public TCFunctionType getVDMFunctionType()
 	{
 		return (TCFunctionType)getVDMType();
+	}
+
+	public TCFunctionType getVDMFunctionPreType()
+	{
+		return ((TCFunctionType)getVDMType()).getPreType();
+	}
+
+	public TCFunctionType getVDMFunctionCurriedPreType(boolean isCurried)
+	{
+		return ((TCFunctionType)getVDMType()).getCurriedPreType(isCurried);
+	}
+
+	public TCFunctionType getVDMFunctionCurriedPostType(boolean isCurried)
+	{
+		return ((TCFunctionType)getVDMType()).getCurriedPostType(isCurried);
+	}
+
+	public TCFunctionType getVDMFunctionPostType()
+	{
+		return ((TCFunctionType)getVDMType()).getPostType();
+	}
+
+	public TCFunctionType getVDMFunctionMeasureType(boolean isCurried, TCType actual)
+	{
+		return ((TCFunctionType)getVDMType()).getMeasureType(isCurried, actual);
 	}
 
 	@Override
@@ -244,7 +276,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 	public TRFunctionType getPreType()
 	{
 		//NB technically, this can be partial (i.e. run-time error failing pre)?
-		return TRFunctionType.newFunctionType(getVDMFunctionType().getPreType(), definitions, parameters, false, TRBasicType.boolType(location));
+		return TRFunctionType.newFunctionType(getVDMFunctionPreType(), definitions, parameters, false, TRBasicType.boolType(location));
 	}
 
 	public TRFunctionType getCurriedPreType(boolean isCurried)
@@ -252,7 +284,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 		if (isCurried && getResultType() instanceof TRFunctionType)
 		{
 			TRFunctionType ft = (TRFunctionType)getResultType();
-			return TRFunctionType.newFunctionType(getVDMFunctionType().getCurriedPreType(isCurried), 
+			return TRFunctionType.newFunctionType(getVDMFunctionCurriedPreType(isCurried), 
 				definitions, parameters, false, ft.getCurriedPreType(isCurried));
 		}
 		else
@@ -265,7 +297,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 	{
 		TRTypeList inSig = parameters.copy(atTopLevelDefinition());
 		inSig.add(getResultType());
-		return TRFunctionType.newFunctionType(getVDMFunctionType().getPostType(), definitions, inSig, false, TRBasicType.boolType(location));
+		return TRFunctionType.newFunctionType(getVDMFunctionPostType(), definitions, inSig, false, TRBasicType.boolType(location));
 	}
 
 	public TRFunctionType getCurriedPostType(boolean isCurried)
@@ -273,7 +305,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 		if (isCurried && getResultType() instanceof TRFunctionType)
 		{
 			TRFunctionType ft = (TRFunctionType)getResultType();
-			return TRFunctionType.newFunctionType(getVDMFunctionType().getCurriedPostType(isCurried), 
+			return TRFunctionType.newFunctionType(getVDMFunctionCurriedPostType(isCurried), 
 				definitions, parameters, false, ft.getCurriedPostType(isCurried));
 		}
 		else
@@ -319,7 +351,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 			}
 			actual = TRProductType.newProductType(location, nats);
 		}
-		return TRFunctionType.newFunctionType(getVDMFunctionType().getMeasureType(isCurried, actual.getVDMType()), 
+		return TRFunctionType.newFunctionType(getVDMFunctionMeasureType(isCurried, actual.getVDMType()), 
 			definitions, params, false, actual);
     }
 
