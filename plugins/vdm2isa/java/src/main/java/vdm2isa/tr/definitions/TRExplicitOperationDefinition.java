@@ -168,8 +168,8 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         // translate the precondition
 		if (predef != null) 
 		{
-            System.out.println(predef.toString());
-            System.out.println(precondition.toString());
+            //System.out.println(predef.toString());
+            //System.out.println(precondition.toString());
 			sb.append(predef.translate());
 			sb.append("\n");
 		} else {
@@ -184,12 +184,12 @@ public class TRExplicitOperationDefinition extends TRDefinition {
             TRFunctionType invType = TRFunctionType.getInvariantType(type);
             TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(state.invPattern));
             
-            predef = TRExplicitFunctionDefinition.createUndeclaredSpecification(
+            predef =  TRExplicitFunctionDefinition.createUndeclaredSpecification(
                 name, nameScope, used, excluded, null, invType, false , parameters, 
                 new TRDefinitionListList(), TRSpecificationKind.PRE
             );
 
-            System.out.println(predef.toString());
+            //System.out.println(predef.toString());
 
             sb.append(predef.translate());
 			sb.append("\n");

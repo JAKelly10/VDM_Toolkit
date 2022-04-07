@@ -37,18 +37,18 @@ public class TRVoidType extends TRType{
     @Override
     public String translate()
     {
-        return TRStateDefinition.state.name.toString();
+        return "()";
     }
 
     @Override
 	public String invTranslate(String varName) 
     {
-        return "inv_" + TRStateDefinition.state.name.toString() + IsaToken.SPACE.toString() + varName;
+        return "()";
     }
 
     protected String getInvTypeString()
     {
-        return "inv_" + TRStateDefinition.state.name.toString();
+        return "()";
     }
 
 
