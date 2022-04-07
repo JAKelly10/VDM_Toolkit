@@ -107,7 +107,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 		return result;
 	}
 
-	public TCFunctionType getVDMFunctionType()
+	public TCType getVDMFunctionType()
 	{
 		return (TCFunctionType)getVDMType();
 	}

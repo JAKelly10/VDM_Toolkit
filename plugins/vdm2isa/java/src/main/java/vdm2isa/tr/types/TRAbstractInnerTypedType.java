@@ -16,7 +16,7 @@ import vdm2isa.tr.definitions.TRDefinitionList;
 public abstract class TRAbstractInnerTypedType extends TRType {
 
 	private static final long serialVersionUID = 1L;
-    private final TRType type;
+    private TRType type;
     
     protected TRAbstractInnerTypedType(TCType vdmType, TRDefinitionList defs, TRType type) {
         super(vdmType, defs);
@@ -53,6 +53,11 @@ public abstract class TRAbstractInnerTypedType extends TRType {
     public TRType getInnerType()
     {
         return type;
+    }
+
+    public void setInnerType(TRType t)
+    {
+        this.type = t;
     }
 
     // @Override 

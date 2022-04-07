@@ -3,6 +3,7 @@ package vdm2isa.tr.definitions;
 import com.fujitsu.vdmj.tc.definitions.TCAccessSpecifier;
 import com.fujitsu.vdmj.tc.definitions.TCDefinition;
 import com.fujitsu.vdmj.tc.definitions.TCExplicitOperationDefinition;
+import com.fujitsu.vdmj.tc.patterns.TCPattern;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
@@ -172,28 +173,29 @@ public class TRExplicitOperationDefinition extends TRDefinition {
             //System.out.println(precondition.toString());
 			sb.append(predef.translate());
 			sb.append("\n");
-		} else {
-            //@JK
-            // I think it needs to have state ammended to parameters and the parameterPatterns
-            // and the return type in type and paramaters in type also ammended to remove the 
-            // void and add state. Otherwise it is adding a lot of difficulty to the code gen.
-            // Is that possible to generate new type and params with the changes?
-            // I am really confused as to why it is not generating any body at all and think it 
-            // has something to do with the missing typeParams but I don't know how to find or make them
-
-            TRFunctionType invType = TRFunctionType.getInvariantType(type);
-            TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(state.invPattern));
-            
-            predef =  TRExplicitFunctionDefinition.createUndeclaredSpecification(
-                name, nameScope, used, excluded, null, invType, false , parameters, 
-                new TRDefinitionListList(), TRSpecificationKind.PRE
-            );
-
-            //System.out.println(predef.toString());
-
-            sb.append(predef.translate());
-			sb.append("\n");
         }
+		// } else {
+        //     //@JK
+        //     // I think it needs to have state ammended to parameters and the parameterPatterns
+        //     // and the return type in type and paramaters in type also ammended to remove the 
+        //     // void and add state. Otherwise it is adding a lot of difficulty to the code gen.
+        //     // Is that possible to generate new type and params with the changes?
+        //     // I am really confused as to why it is not generating any body at all and think it 
+        //     // has something to do with the missing typeParams but I don't know how to find or make them
+
+        //     TRFunctionType invType = TRFunctionType.getInvariantType(type);
+        //     TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(state.invPattern));
+            
+        //     predef =  TRExplicitFunctionDefinition.createUndeclaredSpecification(
+        //         name, nameScope, used, excluded, null, invType, false , parameters, 
+        //         new TRDefinitionListList(), TRSpecificationKind.PRE
+        //     );
+
+        //     //System.out.println(predef.toString());
+
+        //     sb.append(predef.translate());
+		// 	sb.append("\n");
+        // }
 
 		// translate the postcondition
 		if (postdef != null)
@@ -208,11 +210,13 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         // Replaces with newly definied parameters and parameter patterns that have the state included?
         String fcnName     = name.getName();
         String stateType = state.name.toString();
-		String fcnInType   = isConstantFunction() ? stateType : type.parameters.translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
+		String fcnInType   = type.parameters.translate();
 		String fcnOutType  = type.getResultType().translate();
         //(type.getResultType() instanceof TRVoidType) ? type.getResultType() : type.getResultType().translate() + IsaToken.SPACE.toString() + IsaToken.TFUN.toString() + IsaToken.SPACE.toString() + stateType;
 		
-        String fcnParams = translateParameters() + IsaToken.SPACE.toString() + stateType;
+        //@JK
+        //This is a hack cause I need to add an extra parammeter pattern
+        String fcnParams = translateParameters();//+ IsaToken.SPACE.toString() + stateType;
 
         sb.append(IsaTemplates.translateDefinition(
                 //TODO not yet ideal, given multiple equations are possible, but okay for now. 
@@ -227,8 +231,10 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 	{
 		// even for union pattern translate, we can "abosrb" the parameter name within the union case selection
 		// i.e. parameter name can be the same as the selected union parameter name without capturing it. 
-		boolean oldFreshness = parameterPatterns.setDummyFreshness(false, true);
-		String fcnParams   = parameterPatterns.translate();
+        TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(location, false)));
+        parameters.setSemanticSeparator(IsaToken.SPACE.toString());
+        boolean oldFreshness = parameters.setDummyFreshness(false, true);
+        String fcnParams = parameters.translate();
 		parameterPatterns.setDummyFreshness(false,true);//oldFreshness, true);
 		return fcnParams;
 	}

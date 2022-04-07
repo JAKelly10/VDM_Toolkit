@@ -12,6 +12,7 @@ import java.util.Vector;
 import com.fujitsu.vdmj.tc.definitions.TCAccessSpecifier;
 import com.fujitsu.vdmj.tc.definitions.TCDefinition;
 import com.fujitsu.vdmj.tc.definitions.TCExplicitFunctionDefinition;
+import com.fujitsu.vdmj.tc.types.TCFunctionType;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
@@ -35,6 +36,7 @@ import vdm2isa.tr.patterns.TRPatternList;
 import vdm2isa.tr.patterns.TRPatternListList;
 import vdm2isa.tr.patterns.TRUnionContext;
 import vdm2isa.tr.types.TRFunctionType;
+import vdm2isa.tr.types.TROperationType;
 import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRTypeList;
 
@@ -255,17 +257,17 @@ public class TRExplicitFunctionDefinition extends TRAbstractFunctionDefinition
 		{
 			case PRE:
 				result = type.getCurriedPreType(isCurried);
-				assert result.getVDMType().equals(type.getVDMFunctionType().getCurriedPreType(true));
+				assert result.getVDMType().equals(type.getVDMFunctionCurriedPreType(true));
 				break;
 			case POST:
 				result = type.getCurriedPostType(isCurried);
-				assert result.getVDMType().equals(type.getVDMFunctionType().getCurriedPostType(true));
+				assert result.getVDMType().equals(type.getVDMFunctionCurriedPostType(true));
 				break;
 
 			case INV:
 			case INIT:
 				result = type.getInvariantType();
-				assert result.getVDMType().equals(type.getVDMFunctionType().getPreType());
+				assert result.getVDMType().equals(type.getVDMFunctionCurriedPreType(isCurried));
 				break;
 
 			case ORD:
@@ -277,7 +279,7 @@ public class TRExplicitFunctionDefinition extends TRAbstractFunctionDefinition
 
 			case MEASURE:
 				result = type.getMeasureType(isCurried, type.getResultType());
-				assert result.getVDMType().equals(type.getVDMFunctionType().getMeasureType(isCurried, type.getResultType().getVDMType()));
+				assert result.getVDMType().equals(type.getVDMFunctionMeasureType(isCurried, type.getResultType().getVDMType()));
 				break;
 
 			case NONE:
@@ -584,7 +586,7 @@ public class TRExplicitFunctionDefinition extends TRAbstractFunctionDefinition
 				TCAccessSpecifier.DEFAULT, 
 				name, 
 				typeParams, 
-				type != null ? type.getVDMFunctionType() : null, 
+				type != null && (type instanceof TRFunctionType) ? (TCFunctionType)type.getVDMFunctionType() : null, 
 				paramPatternList != null ? paramPatternList.getVDMPatternListList() : null, 
 				body != null ? body.getVDMExpr() : null, 
 				precondition != null ? precondition.getVDMExpr() : null, 

@@ -5,6 +5,9 @@ import com.fujitsu.vdmj.tc.types.TCOperationType;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
+
+import javax.xml.transform.Result;
+
 import com.fujitsu.vdmj.lex.LexLocation;
 
 import vdm2isa.lex.IsaToken;
@@ -15,9 +18,11 @@ import vdm2isa.messages.IsaInfoMessage;
 
 import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRDefinitionList;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.types.TRType;
 import vdm2isa.tr.types.TRAbstractInnerTypedType;
 import vdm2isa.tr.types.TRTypeList;
+import vdm2isa.tr.types.TRVoidType;
 
 import vdm2isa.tr.types.visitors.TRTypeVisitor;
 
@@ -34,13 +39,37 @@ public class TROperationType extends TRAbstractInnerTypedType{
 		this.pure = pure;
 	}
 
+	static private TRType NoVoidReturn(TRType result)
+	{
+		if(result instanceof TRVoidType)
+		{
+			TRType paramType = TRStateDefinition.state.recordType.copy(false);
+			return paramType;
+		} 
+		return result;
+	}
+
+	private void StateAddedParameters()
+	{
+		TRType paramType = TRStateDefinition.state.recordType.copy(false);
+		parameters.add(paramType);
+	}
+
     @Override
 	public void setup()
 	{
 		super.setup();
 		setFormattingSeparator("\n\t");
 		// presume that all function types will be curried
-		TRNode.setup(parameters); 
+		//this.parameters = StateAddedParameters(param);
+		StateAddedParameters();
+		TRNode.setup(parameters);
+		if(getInnerType() instanceof TRVoidType)
+		{
+			TRType paramType = TRStateDefinition.state.recordType.copy(false);
+			setInnerType(paramType);
+		} 
+		TRNode.setup(getInnerType());
 		parameters.setCurried(true);
 		//System.out.println(toString());
 	}
