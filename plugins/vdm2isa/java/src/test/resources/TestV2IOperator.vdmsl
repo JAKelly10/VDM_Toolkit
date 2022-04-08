@@ -17,9 +17,9 @@ Explicit(inc) ==
  pre inc < 10 and x > 0
  post x~ < x;
 
--- Explicit_no_condition: real*real ==> ()
--- Explicit_no_condition(M,A) == 
---    (y := y*M+A);
+Explicit_no_condition: real*real ==> ()
+Explicit_no_condition(M,A) == 
+   (y := y*M+A);
 
 Implicit(M,A:real) ==
    (y := y*M+A)

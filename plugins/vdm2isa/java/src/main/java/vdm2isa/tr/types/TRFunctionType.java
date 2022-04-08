@@ -9,11 +9,13 @@ import vdm2isa.lex.IsaToken;
 import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRDefinitionList;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.patterns.TRBasicPattern;
 import vdm2isa.tr.patterns.TRPattern;
 import vdm2isa.tr.patterns.TRPatternList;
 import vdm2isa.tr.patterns.TRPatternListList;
+import vdm2isa.tr.types.TRVoidType;
 import vdm2isa.tr.types.visitors.TRParametricTypeFinder;
 import vdm2isa.tr.types.visitors.TRTypeVisitor;
 
@@ -33,7 +35,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 	 * This field is never used, but is necessary for the ClassMapper to work 
 	 * (i.e. ClassMapper requires the same field name, even though we percolate it through the AbstractInnerType hierarchy)
 	 */
-	private final TRType result;
+	private TRType result;
 
 	public TRFunctionType(TCType vdmType, TRDefinitionList definitions, TRTypeList parameters, boolean partial, TRType result, boolean ignore)
 	{
@@ -154,9 +156,10 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 		return partial ? IsaToken.FUN : IsaToken.TFUN;
 	}
 
-	public TRType getInnerType()
+	public void setResult(TRType t)
 	{
-		return result;
+		this.result = t;
+		setInnerType(t);
 	}
 
 	public TRType getResultType()

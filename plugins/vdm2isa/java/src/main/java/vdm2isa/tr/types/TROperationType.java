@@ -27,16 +27,16 @@ import vdm2isa.tr.types.TRVoidType;
 
 import vdm2isa.tr.types.visitors.TRTypeVisitor;
 
-public class TROperationType extends TRAbstractInnerTypedType{
+public class TROperationType extends TRFunctionType{
 
     private static final long serialVersionUID = 1L;
-	public TRTypeList parameters;
+	// public TRTypeList parameters;
 	public boolean pure;
 
 	public TROperationType(TCOperationType vdmType, TRDefinitionList definitions, TRTypeList parameters, TRType result, boolean pure)
 	{
-		super(vdmType, definitions, result);
-		this.parameters = parameters;
+		super(vdmType, definitions, parameters, false, result, false);
+		// this.parameters = parameters;
 		this.pure = pure;
 	}
 
@@ -49,20 +49,16 @@ public class TROperationType extends TRAbstractInnerTypedType{
     @Override
 	public void setup()
 	{
-		super.setup();
-		setFormattingSeparator("\n\t");
-		// presume that all function types will be curried
-		//this.parameters = StateAddedParameters(param);
 		StateAddedParameters();
-		TRNode.setup(parameters);
 		if(getInnerType() instanceof TRVoidType)
 		{
 			TRType paramType = TRStateDefinition.state.recordType.copy(false);
-			setInnerType(paramType);
+			setResult(paramType);
 		} 
-		TRNode.setup(getInnerType());
+		super.setup();
+		setFormattingSeparator("\n\t");
 		parameters.setCurried(true);
-		//System.out.println(toString());
+
 	}
 
     @Override
@@ -71,143 +67,46 @@ public class TROperationType extends TRAbstractInnerTypedType{
 		return visitor.caseOperationType(this, arg);
 	}
 
+	@Override
 	public TRType getResultType()
 	{
 		return getInnerType();//result;//getInnerType();
 	}
 
+	@Override
 	public TCType getVDMFunctionType()
 	{
 		return (TCOperationType)getVDMType();
 	}
 
+	@Override
 	public TCFunctionType getVDMFunctionPreType()
 	{
 		return ((TCFunctionType)getVDMType()).getPreType();
 	}
 
+	@Override
 	public TCFunctionType getVDMFunctionPostType()
 	{
 		return ((TCFunctionType)getVDMType()).getPostType();
 	}
 
+	@Override
 	public TCFunctionType getVDMFunctionCurriedPreType(boolean isCurried)
 	{
 		return getVDMFunctionPreType();
 	}
 
+	@Override
 	public TCFunctionType getVDMFunctionCurriedPostType(boolean isCurried)
 	{
 		return getVDMFunctionPostType();
 	}
 
+    @Override
 	public TCFunctionType getVDMFunctionMeasureType(boolean isCurried, TCType actual)
 	{
 		return null;
 	}
-
-    
-    @Override
-    public String translate(){
-        StringBuilder sb = new StringBuilder();
-		sb.append(parameters.translate());
-		sb.append(IsaToken.SPACE.toString());
-		sb.append(isaToken().toString());
-		sb.append(IsaToken.SPACE.toString());
-		sb.append(getInnerType().translate());
-		return sb.toString();
-
-    }
-
-	protected String paramInvTranslate(int index)
-	{
-		assert index >= 0 && index < parameters.size();
-        StringBuilder sb = new StringBuilder();
-		//if (isParametricInvariantType())
-		//{
-			// only one parameter
-			//assert index == 0 && parameters.get(index) instanceof TRParameterType;
-			//sb.append(parameters.get(index).invTranslate(null));
-		//}
-        if (!isParametricInvariantType())
-		{
-			sb.append(getInvTypeString());
-			sb.append(IsaToken.SPACE.toString());
-		}
-		sb.append(parameters.get(index).invTranslate(null));
-		return sb.toString();
-	}
-
-    @Override
-	protected String getInvTypeString()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(IsaToken.INV.toString());
-		// transform "lambda" => "Lambda" for inv_Lambda call
-		int i = sb.length();
-		sb.append(IsaToken.LAMBDA.vdmToken().toString());
-		sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
-		return sb.toString();
-    }
-
-	@Override
-	public String invTranslate(String varName) {
-        StringBuilder sb = new StringBuilder();
-		sb.append(paramInvTranslate(0));
-		for(int i = 1; i < parameters.size(); i++)
-		{
-			sb.append(IsaToken.SPACE.toString());
-			sb.append(IsaToken.LPAREN.toString());
-			sb.append(paramInvTranslate(i));
-		}
-		sb.append(IsaToken.SPACE.toString());
-		sb.append(getResultType().invTranslate(null));
-		if (parameters.size() > 1)
-		{
-			sb.append(IsaTemplates.replicate(IsaToken.RPAREN.toString(), parameters.size()-1));
-		}
-		sb.append(varName != null ? varName : "");
-		return IsaToken.parenthesise(sb.toString());
-		// // function type invariants are implicit? e.g. v = (lambda x: nat, y: nat & x + y)
-		// // we can't really check inv_VDMNat1 of x or y; that's the LambdaExpression's job
-		// // we must, however, check the type invariant of the result!
-		// // that also means, the declaring party must take that into account in the inv_XXX def!
-		// // e.g. inv_v x y == "inv_VDMNat (v x y)"
-		// String rVarName = varName != null ? dummyVarNames(varName) : varName;
-		// StringBuilder sb = new StringBuilder();
-		// sb.append(getFormattingSeparator());
-
-		// //sb.append(IsaToken.comment(IsaInfoMessage.VDM_LAMBDA_INVARIANT.toString()));		
-		// sb.append(getFormattingSeparator());
-		// sb.append(IsaToken.parenthesise(
-		// 	IsaToken.INV.toString() + IsaToken.LAMBDA.toString() + IsaToken.SPACE.toString() +
-		// 	getInnerType().invTranslate(null) + IsaToken.SPACE.toString() + getResultType().invTranslate(null) +
-		// 	(rVarName == null ? "" : IsaToken.SPACE.toString() + rVarName))
-		// );
-		// return sb.toString();
-	}
-
-	/**
-	 * Type parametric invariant types inv_T for generic type @T have function type (@T => bool). 
-	 * @return
-	 */
-	public boolean isParametricInvariantType()
-	{
-		return parameters.size() == 1 && parameters.get(0) instanceof TRParameterType && getResultType().isBooleanType();
-	}
-
-
-    @Override
-    public TRType copy(boolean atTLD){
-        //TODO need to actually implement this deep copy
-        return this;
-    }
-
-    @Override
-    public IsaToken isaToken() {
-        return IsaToken.TFUN;
-    }
- 
-
 
 }
