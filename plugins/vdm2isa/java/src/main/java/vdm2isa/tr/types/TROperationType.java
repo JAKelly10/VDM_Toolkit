@@ -2,6 +2,7 @@ package vdm2isa.tr.types;
 
 import com.fujitsu.vdmj.tc.types.TCType;
 import com.fujitsu.vdmj.tc.types.TCOperationType;
+import com.fujitsu.vdmj.tc.types.TCFunctionType;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
@@ -39,16 +40,6 @@ public class TROperationType extends TRAbstractInnerTypedType{
 		this.pure = pure;
 	}
 
-	static private TRType NoVoidReturn(TRType result)
-	{
-		if(result instanceof TRVoidType)
-		{
-			TRType paramType = TRStateDefinition.state.recordType.copy(false);
-			return paramType;
-		} 
-		return result;
-	}
-
 	private void StateAddedParameters()
 	{
 		TRType paramType = TRStateDefinition.state.recordType.copy(false);
@@ -83,6 +74,36 @@ public class TROperationType extends TRAbstractInnerTypedType{
 	public TRType getResultType()
 	{
 		return getInnerType();//result;//getInnerType();
+	}
+
+	public TCType getVDMFunctionType()
+	{
+		return (TCOperationType)getVDMType();
+	}
+
+	public TCFunctionType getVDMFunctionPreType()
+	{
+		return ((TCFunctionType)getVDMType()).getPreType();
+	}
+
+	public TCFunctionType getVDMFunctionPostType()
+	{
+		return ((TCFunctionType)getVDMType()).getPostType();
+	}
+
+	public TCFunctionType getVDMFunctionCurriedPreType(boolean isCurried)
+	{
+		return getVDMFunctionPreType();
+	}
+
+	public TCFunctionType getVDMFunctionCurriedPostType(boolean isCurried)
+	{
+		return getVDMFunctionPostType();
+	}
+
+	public TCFunctionType getVDMFunctionMeasureType(boolean isCurried, TCType actual)
+	{
+		return null;
 	}
 
     

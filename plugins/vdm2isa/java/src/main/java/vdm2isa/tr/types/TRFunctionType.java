@@ -27,7 +27,7 @@ import com.fujitsu.vdmj.tc.types.TCType;
 public class TRFunctionType extends TRAbstractInnerTypedType
 {
 	private static final long serialVersionUID = 1L;
-	public final TRTypeList parameters;
+	public TRTypeList parameters;
 	public final boolean partial;
 	/**
 	 * This field is never used, but is necessary for the ClassMapper to work 
