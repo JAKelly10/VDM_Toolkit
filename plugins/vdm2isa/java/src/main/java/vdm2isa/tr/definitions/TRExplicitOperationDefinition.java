@@ -42,24 +42,25 @@ import vdm2isa.tr.types.TRVoidType;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 
 
-public class TRExplicitOperationDefinition extends TRDefinition {
+public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition {
 
     private static final long serialVersionUID = 1L;
-	public TROperationType type;
+	// public TROperationType type;
 	public final TRTypeList unresolved;
 	public final TRPatternList parameterPatterns;
-	public final TRExpression precondition;
-	public final TRExpression postcondition;
+	// public final TRExpression precondition;
+	// public final TRExpression postcondition;
 	//public final TRStatement body;
 
-	public TRExplicitFunctionDefinition predef;
-	public TRExplicitFunctionDefinition postdef;
+	// public TRExplicitFunctionDefinition predef;
+	// public TRExplicitFunctionDefinition postdef;
 	public TRDefinitionList paramDefinitions;
 	public TRStateDefinition state;
 
 	private TRType actualResult = null;
 	public boolean isConstructor = false;
 	public TRTypeSet possibleExceptions = null;
+    //public TRPatternListList paramPatternList;
 
     public TRExplicitOperationDefinition(
         TCDefinition definition,
@@ -84,16 +85,42 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         boolean isConstructor,
         boolean ignore
     ) {
-        super(definition, name != null ? name.getLocation() : LexLocation.ANY, comments, annotations, name, nameScope, used, excluded);
+        //super(definition, name != null ? name.getLocation() : LexLocation.ANY, comments, annotations, name, nameScope, used, excluded);
+        super(
+            definition, 
+			comments,
+			annotations,
+			name,
+			nameScope, 
+			used, 
+			excluded,
+			null, // typeParams
+			type,
+			null,  // needs to be done in setup potentially
+			null, // body
+			precondition,
+			postcondition, 
+			false, // typeInvariant
+			null,
+			false, 
+			predef,
+			postdef,
+			null, // paramDefinitionList
+			false,
+			false,
+			type.getInnerType(),
+			type.getInnerType(), 
+            false
+        );
         this.parameterPatterns = parameterPatterns;
         this.paramDefinitions = paramDefinitions;
-        this.type = type;
+        // this.type = type;
 		this.unresolved = unresolved;
 
-        this.precondition = precondition;
-        this.postcondition = postcondition;
-        this.predef = predef;
-        this.postdef = postdef;
+        // this.precondition = precondition;
+        // this.postcondition = postcondition;
+        // this.predef = predef;
+        // this.postdef = postdef;
         this.state = state;
         this.isConstructor = isConstructor;
 
@@ -148,23 +175,25 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 
     @Override
     public void setup(){
+        paramPatternList = TRPatternListList.newPatternListList(TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(location, false))).getFlatPatternList());
+        paramPatternList.setSemanticSeparator(IsaToken.SPACE.toString());
         super.setup();
         setFormattingSeparator("\n\t");
         TRNode.setup(predef, postdef, precondition, postcondition, type, state, paramDefinitions, parameterPatterns, unresolved);
     }
 
-    @Override
-    public IsaToken isaToken() {
-        return IsaToken.EOF;
-    }
+    // @Override
+    // public IsaToken isaToken() {
+    //     return IsaToken.EOF;
+    // }
 
     @Override
     public <R, S> R apply(TRDefinitionVisitor<R, S> visitor, S arg) {
         return visitor.caseExplicitOperationDefinition(this, arg);
     }
 
-    @Override
-    public String translate() {
+    // @Override
+    public String t() {
         StringBuilder sb = new StringBuilder();
         // translate the precondition
 		if (predef != null) 
@@ -216,7 +245,7 @@ public class TRExplicitOperationDefinition extends TRDefinition {
 		
         //@JK
         //This is a hack cause I need to add an extra parammeter pattern
-        String fcnParams = translateParameters();//+ IsaToken.SPACE.toString() + stateType;
+        String fcnParams = tp();//+ IsaToken.SPACE.toString() + stateType;
 
         sb.append(IsaTemplates.translateDefinition(
                 //TODO not yet ideal, given multiple equations are possible, but okay for now. 
@@ -227,27 +256,27 @@ public class TRExplicitOperationDefinition extends TRDefinition {
         return sb.toString();
     }
 
-	protected String translateParameters()
+	protected String tp()
 	{
 		// even for union pattern translate, we can "abosrb" the parameter name within the union case selection
 		// i.e. parameter name can be the same as the selected union parameter name without capturing it. 
-        TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(location, false)));
-        parameters.setSemanticSeparator(IsaToken.SPACE.toString());
-        boolean oldFreshness = parameters.setDummyFreshness(false, true);
-        String fcnParams = parameters.translate();
-		parameterPatterns.setDummyFreshness(false,true);//oldFreshness, true);
+        // TRPatternListList parameters = TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(location, false)));
+        // paramPatternList.setSemanticSeparator(IsaToken.SPACE.toString());
+        boolean oldFreshness = paramPatternList.setDummyFreshness(false, true);
+        String fcnParams = paramPatternList.translate();
+		paramPatternList.setDummyFreshness(false,true);//oldFreshness, true);
 		return fcnParams;
 	}
 
-    protected boolean isConstantFunction()
-	{
-		return type.parameters.isEmpty();
-	}
+    // protected boolean isConstantFunction()
+	// {
+	// 	return type.parameters.isEmpty();
+	// }
     
-    @Override 
-    public String toString()
-    {
-        return super.toString();
-    }
+    // @Override 
+    // public String toString()
+    // {
+    //     return super.toString();
+    // }
 
 }
