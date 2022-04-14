@@ -25,7 +25,7 @@ import vdm2isa.tr.types.TRUnknownType;
 
 import com.fujitsu.vdmj.lex.LexLocation;
 import com.fujitsu.vdmj.tc.definitions.TCDefinitionList;
-import com.fujitsu.vdmj.tc.statements.TCStatement;
+import com.fujitsu.vdmj.tc.statements.TCAssignmentStatement;
 import com.fujitsu.vdmj.tc.expressions.visitors.TCFreeVariableExpressionVisitor;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameSet;
@@ -35,17 +35,15 @@ import com.fujitsu.vdmj.typechecker.FlatEnvironment;
 
 public class TRAssignmentStatement extends TRStatement {
 
-    public TRAssignmentStatement(LexLocation location, TRIsaVDMCommentList comments, TCStatement exp, TRType stmttype)
-	{
-		super(location, comments, exp, stmttype);
-	}
+    public TRExpression exp;
+    public TRStateDesignator target;
 
-    // public TRStatement(LexLocation location, TRIsaVDMCommentList comments, TCStatement exp, TRType stmttype)
-	// {
-	// 	super(location, null, stmttype);
-    //     this.expS = exp;
-    //     this.comments = comments;
-	// }
+    public TRAssignmentStatement(LexLocation location, TRIsaVDMCommentList comments, TCAssignmentStatement as, TRType stmttype, TRStateDesignator target, TRExpression exp)
+	{
+		super(location, comments, as, stmttype);
+        this.exp = exp;
+        this.target = target;
+	}
 
     public <R, S> R apply(TRExpressionVisitor<R, S> visitor, S arg) 
     {
@@ -54,7 +52,7 @@ public class TRAssignmentStatement extends TRStatement {
     }
 
     public String translate(){
-        return "statement";
+        return "assignment";
     }
 
     public IsaToken isaToken() {

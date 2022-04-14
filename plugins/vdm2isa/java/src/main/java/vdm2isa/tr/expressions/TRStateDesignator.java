@@ -17,7 +17,7 @@ import vdm2isa.tr.types.TRAbstractInnerTypedType;
 import vdm2isa.tr.types.TRInvariantType;
 import vdm2isa.tr.types.TRMapType;
 import vdm2isa.tr.types.TROptionalType;
-import vdm2isa.tr.types.TRRecordType;
+import vdm2isa.tr.types.TRVoidType;
 import vdm2isa.tr.types.TRSeqType;
 import vdm2isa.tr.types.TRSetType;
 import vdm2isa.tr.types.TRType;
@@ -34,7 +34,7 @@ import com.fujitsu.vdmj.typechecker.FlatEnvironment;
 
 // @JK
 // This is built on a hack as it technically needs its own base since it seems to have no connection to Expression
-public class TRStateDesignator extends TRExpression{
+public abstract class TRStateDesignator extends TRExpression{
 
     public TRStateDesignator(LexLocation location)
 	{

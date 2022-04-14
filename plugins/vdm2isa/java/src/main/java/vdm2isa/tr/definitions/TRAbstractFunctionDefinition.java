@@ -178,7 +178,7 @@ public abstract class TRAbstractFunctionDefinition extends TRDefinition
 				,TRSpecificationKind.MEASURE
 			).contains(implicitSpecificationKind)
 			|| isLocal()
-			|| true
+		//	|| true
 			) 
 			System.out.println(toString());
 	} 

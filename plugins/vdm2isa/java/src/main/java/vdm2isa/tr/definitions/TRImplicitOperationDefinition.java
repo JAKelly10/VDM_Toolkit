@@ -27,6 +27,7 @@ import vdm2isa.tr.definitions.TRExplicitOperationDefinition;
 import vdm2isa.tr.expressions.TRApplyExpression;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRExpressionList;
+import vdm2isa.tr.expressions.TRStatement;
 import vdm2isa.tr.patterns.TRBasicPattern;
 import vdm2isa.tr.patterns.TRPattern;
 import vdm2isa.tr.patterns.TRPatternList;
@@ -61,7 +62,7 @@ public class TRImplicitOperationDefinition extends TRExplicitOperationDefinition
         TRPatternListTypePairList parameterPatterns,
         TROperationType type,
         TRTypeList unresolved,
-        // TRStatement body,
+        TRStatement body,
         TRExpression precondition,
         TRExpression postcondition, 
         TRExplicitFunctionDefinition predef,
@@ -82,7 +83,7 @@ public class TRImplicitOperationDefinition extends TRExplicitOperationDefinition
             new TRDefinitionList(),
             type,
             unresolved,
-            // TRStatement body,
+            body,
             precondition,
             postcondition, 
             predef,

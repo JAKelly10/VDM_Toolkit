@@ -27,6 +27,7 @@ import vdm2isa.tr.definitions.TRDefinition;
 import vdm2isa.tr.expressions.TRApplyExpression;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRExpressionList;
+import vdm2isa.tr.expressions.TRStatement;
 import vdm2isa.tr.patterns.TRBasicPattern;
 import vdm2isa.tr.patterns.TRPattern;
 import vdm2isa.tr.patterns.TRPatternList;
@@ -76,7 +77,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
         TRDefinitionList paramDefinitions,
         TROperationType type,
         TRTypeList unresolved,
-        // TRStatement body,
+        TRStatement body,
         TRExpression precondition,
         TRExpression postcondition, 
         TRExplicitFunctionDefinition predef,
@@ -97,7 +98,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 			null, // typeParams
 			type,
 			null,  // needs to be done in setup potentially
-			null, // body
+			body, // body
 			precondition,
 			postcondition, 
 			false, // typeInvariant
@@ -140,7 +141,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
         TRDefinitionList paramDefinitions,
         TROperationType type,
         TRTypeList unresolved,
-        // TRStatement body,
+        TRStatement body,
         TRExpression precondition,
         TRExpression postcondition, 
         TRExplicitFunctionDefinition predef,
@@ -162,7 +163,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
             paramDefinitions,
             type,
             unresolved,
-            // TRStatement body,
+            body, // TRStatement body,
             precondition,
             postcondition, 
             predef,

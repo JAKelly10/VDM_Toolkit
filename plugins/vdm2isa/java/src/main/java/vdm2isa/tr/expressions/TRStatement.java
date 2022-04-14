@@ -34,7 +34,7 @@ import com.fujitsu.vdmj.typechecker.FlatEnvironment;
 
 // @JK
 // Is it ok that we are fudging it into an expression?
-public class TRStatement extends TRExpression {
+public abstract class TRStatement extends TRExpression {
 
     TRIsaVDMCommentList comments;
 

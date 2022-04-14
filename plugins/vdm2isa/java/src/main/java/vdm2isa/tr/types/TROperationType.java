@@ -3,6 +3,7 @@ package vdm2isa.tr.types;
 import com.fujitsu.vdmj.tc.types.TCType;
 import com.fujitsu.vdmj.tc.types.TCOperationType;
 import com.fujitsu.vdmj.tc.types.TCFunctionType;
+import com.fujitsu.vdmj.tc.definitions.TCStateDefinition;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
@@ -82,13 +83,13 @@ public class TROperationType extends TRFunctionType{
 	@Override
 	public TCFunctionType getVDMFunctionPreType()
 	{
-		return ((TCFunctionType)getVDMType()).getPreType();
+		return ((TCOperationType)getVDMType()).getPreType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
 	}
 
 	@Override
 	public TCFunctionType getVDMFunctionPostType()
 	{
-		return ((TCFunctionType)getVDMType()).getPostType();
+		return ((TCOperationType)getVDMType()).getPostType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
 	}
 
 	@Override
