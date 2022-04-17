@@ -175,6 +175,7 @@ map TCAssignmentStatement{location, comments, stmttype, target, exp} to TRAssign
 
 map TCStateDesignator{} to TRStateDesignator();
 map TCFieldDesignator{location, object, field} to TRFieldDesignator(location, object, field);
+map TCIdentifierDesignator{location, name} to TRIdentifierDesignator(location, name);
 
 #############################################################################
 package com.fujitsu.vdmj.ast.lex to vdm2isa.lex;
