@@ -33,4 +33,10 @@ public abstract class TRSimpleBlockStatement extends TRStatement {
         super.setup();
         TRNode.setup(statements);
     }
+
+    @Override
+    public String translate()
+    {
+        return statements.translate();
+    }
 }

@@ -47,7 +47,7 @@ public abstract class TRStateDesignator extends TRExpression{
     }
 
     public String translate(){
-        return "Designator";
+        return "";
     }
 
     public IsaToken isaToken() {

@@ -8,6 +8,7 @@ import vdm2isa.messages.IsaWarningMessage;
 import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
 import vdm2isa.tr.expressions.TRExpression;
+import vdm2isa.tr.expressions.TRBinaryExpression;
 import vdm2isa.tr.expressions.visitors.TRExpressionVisitor;
 import vdm2isa.tr.patterns.TRMultipleBindList;
 import vdm2isa.tr.patterns.TRPattern;
@@ -52,7 +53,12 @@ public class TRAssignmentStatement extends TRStatement {
     }
 
     public String translate(){
-        return "assignment";
+        if(exp instanceof TRBinaryExpression) {
+            System.out.println(((TRBinaryExpression)exp).toString());
+            System.out.println(((TRBinaryExpression)exp).left.toString());
+            System.out.println(((TRBinaryExpression)exp).right.toString());
+        }
+        return target.translate() + " Assignemnt " + exp.translate();
     }
 
     public IsaToken isaToken() {

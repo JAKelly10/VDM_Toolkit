@@ -52,9 +52,9 @@ public abstract class TRStatement extends TRExpression {
         return visitor.caseTRStatement(this, arg);
     }
 
-    public String translate(){
-        return "statement";
-    }
+    // public String translate(){
+    //     return "statement";
+    // }
 
     public IsaToken isaToken() {
         return IsaToken.EOF;

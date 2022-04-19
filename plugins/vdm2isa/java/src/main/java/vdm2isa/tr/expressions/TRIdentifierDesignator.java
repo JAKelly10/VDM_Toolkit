@@ -7,6 +7,7 @@ import vdm2isa.messages.IsaInfoMessage;
 import vdm2isa.messages.IsaWarningMessage;
 import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.visitors.TRExpressionVisitor;
 import vdm2isa.tr.expressions.TRStateDesignator;
@@ -49,7 +50,7 @@ public class TRIdentifierDesignator extends TRStateDesignator {
     }
 
     public String translate(){
-        return "identifier";
+        return super.translate() + IsaToken.LPAREN.toString() + TRStateDefinition.state.recordType.findField(name.toString()).translate() + IsaToken.RPAREN.toString();
     }
 
     public IsaToken isaToken() {
