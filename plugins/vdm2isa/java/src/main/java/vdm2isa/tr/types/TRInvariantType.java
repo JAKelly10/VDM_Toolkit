@@ -57,7 +57,12 @@ public abstract class TRInvariantType extends TRType
         this.orddef = orddef;
     }
 
-    protected TRExplicitFunctionDefinition getInvDef()
+    // protected TRExplicitFunctionDefinition getInvDef()
+    // {
+    //     return invdef;
+    // }
+
+    public TRExplicitFunctionDefinition getInvDef()
     {
         return invdef;
     }

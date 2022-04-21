@@ -171,7 +171,7 @@ map TCStatementList{} to TRStatementList(this);
 map TCSimpleBlockStatement{} to TRSimpleBlockStatement();
 map TCBlockStatement{location, comments, stmttype, statements, assignmentDefs} to TRBlockStatement(location, comments, this, stmttype, statements, assignmentDefs);
 
-map TCAssignmentStatement{location, comments, stmttype, target, exp} to TRAssignmentStatement(location, comments, this, stmttype, target, exp);
+map TCAssignmentStatement{location, comments, stmttype, target, exp, targetType, expType} to TRAssignmentStatement(location, comments, this, stmttype, target, exp, targetType, expType);
 
 map TCStateDesignator{} to TRStateDesignator();
 map TCFieldDesignator{location, object, field} to TRFieldDesignator(location, object, field);

@@ -9,6 +9,7 @@ import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRBinaryExpression;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.expressions.visitors.TRExpressionVisitor;
 import vdm2isa.tr.patterns.TRMultipleBindList;
 import vdm2isa.tr.patterns.TRPattern;
@@ -38,12 +39,16 @@ public class TRAssignmentStatement extends TRStatement {
 
     public TRExpression exp;
     public TRStateDesignator target;
+    public TRType targetType;
+	public TRType expType;
 
-    public TRAssignmentStatement(LexLocation location, TRIsaVDMCommentList comments, TCAssignmentStatement as, TRType stmttype, TRStateDesignator target, TRExpression exp)
+    public TRAssignmentStatement(LexLocation location, TRIsaVDMCommentList comments, TCAssignmentStatement as, TRType stmttype, TRStateDesignator target, TRExpression exp, TRType targetType, TRType expType)
 	{
 		super(location, comments, as, stmttype);
         this.exp = exp;
         this.target = target;
+        this.expType = expType;
+        this.targetType = targetType;
 	}
 
     public <R, S> R apply(TRExpressionVisitor<R, S> visitor, S arg) 
@@ -53,12 +58,15 @@ public class TRAssignmentStatement extends TRStatement {
     }
 
     public String translate(){
-        if(exp instanceof TRBinaryExpression) {
-            System.out.println(((TRBinaryExpression)exp).toString());
-            System.out.println(((TRBinaryExpression)exp).left.toString());
-            System.out.println(((TRBinaryExpression)exp).right.toString());
-        }
-        return target.translate() + " Assignemnt " + exp.translate();
+        // if(exp instanceof TRBinaryExpression) {
+        //     System.out.println(((TRBinaryExpression)exp).toString());
+        //     System.out.println(((TRBinaryExpression)exp).left.toString());
+        //     System.out.println(((TRBinaryExpression)exp).right.toString());
+        // }
+        //System.out.println(TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null));
+        // Check Parattern context is the correct dummy?
+        return TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null) + "\n" + 
+            target.translate() + " Assignemnt " + exp.translate();
     }
 
     public IsaToken isaToken() {
