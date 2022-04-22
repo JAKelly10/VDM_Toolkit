@@ -108,7 +108,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 			postdef,
 			null, // paramDefinitionList
 			false,
-			false,
+			body != null ? false : true,
 			type.getInnerType(),
 			type.getInnerType(), 
             false
@@ -269,15 +269,9 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 		return fcnParams;
 	}
 
-    // protected boolean isConstantFunction()
-	// {
-	// 	return type.parameters.isEmpty();
-	// }
-    
-    // @Override 
-    // public String toString()
-    // {
-    //     return super.toString();
-    // }
-
+    @Override 
+	public boolean isImplicitFunction()
+	{
+		return true;
+	}
 }

@@ -53,7 +53,7 @@ public abstract class TRStatement extends TRExpression {
     }
 
     // public String translate(){
-    //     return "statement";
+    //     return comments.translate();
     // }
 
     public IsaToken isaToken() {

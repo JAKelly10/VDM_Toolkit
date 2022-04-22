@@ -35,5 +35,11 @@ public class TRBlockStatement extends TRSimpleBlockStatement
         super.setup();
         TRNode.setup(assignmentDefs);
     }
+
+    @Override
+    public String translate()
+    {
+        return assignmentDefs.translate() + super.translate();
+    }
     
 }

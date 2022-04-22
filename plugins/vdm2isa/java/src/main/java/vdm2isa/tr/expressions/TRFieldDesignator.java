@@ -51,6 +51,7 @@ public class TRFieldDesignator extends TRStateDesignator {
     }
 
     public String translate(){
+        // TODO
         return "Designator Field";
     }
 

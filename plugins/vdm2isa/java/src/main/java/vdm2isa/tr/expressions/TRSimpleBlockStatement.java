@@ -22,7 +22,7 @@ import com.fujitsu.vdmj.tc.statements.TCStatement;
 public abstract class TRSimpleBlockStatement extends TRStatement {
     public TRStatementList statements;
 
-    public TRSimpleBlockStatement(LexLocation location, TRIsaVDMCommentList comments,TCSimpleBlockStatement exp, TRType stmttype, TRStatementList statements)
+    public TRSimpleBlockStatement(LexLocation location, TRIsaVDMCommentList comments, TCSimpleBlockStatement exp, TRType stmttype, TRStatementList statements)
 	{
 		super(location, comments, (TCStatement)exp, stmttype);
 		this.statements = statements;
