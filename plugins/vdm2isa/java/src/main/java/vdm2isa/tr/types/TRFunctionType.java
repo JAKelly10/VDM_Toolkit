@@ -32,7 +32,7 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 	public TRTypeList parameters;
 	public final boolean partial;
 	/**
-	 * This field is never used, but is necessary for the ClassMapper to work 
+	 * This field is never used, but is necessary for the ClassMapper to work. @JK It is used some where as if it is not updated by operation it doesn't owrk
 	 * (i.e. ClassMapper requires the same field name, even though we percolate it through the AbstractInnerType hierarchy)
 	 */
 	private TRType result;
@@ -121,11 +121,13 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 
 	public TCFunctionType getVDMFunctionCurriedPreType(boolean isCurried)
 	{
+		System.out.println(((TCFunctionType)getVDMType()).getCurriedPreType(isCurried).toDisplay());
 		return ((TCFunctionType)getVDMType()).getCurriedPreType(isCurried);
 	}
 
 	public TCFunctionType getVDMFunctionCurriedPostType(boolean isCurried)
 	{
+		System.out.println(((TCFunctionType)getVDMType()).getCurriedPostType(isCurried).toDisplay());
 		return ((TCFunctionType)getVDMType()).getCurriedPostType(isCurried);
 	}
 

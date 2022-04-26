@@ -74,6 +74,11 @@ public abstract class TRDefinition extends TRNode implements TRUnionContext//, C
 		return NameScope.LOCAL.equals(nameScope);
 	}
 
+	public TCNameToken getName()
+	{
+		return name;
+	}
+
 	@Override 
 	public void setup()
 	{

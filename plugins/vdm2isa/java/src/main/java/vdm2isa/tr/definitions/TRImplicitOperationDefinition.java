@@ -108,4 +108,9 @@ public class TRImplicitOperationDefinition extends TRExplicitOperationDefinition
         return visitor.caseImplicitOperationDefinition(this, arg);
     } 
     
+    @Override 
+	public boolean isImplicitFunction()
+	{
+		return true;
+	}
 }

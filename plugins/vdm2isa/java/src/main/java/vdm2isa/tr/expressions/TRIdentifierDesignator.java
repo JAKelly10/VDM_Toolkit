@@ -51,7 +51,7 @@ public class TRIdentifierDesignator extends TRStateDesignator {
 
     public String translateNoBind()
     {
-        return super.translate() + IsaToken.LPAREN.toString() + TRStateDefinition.state.recordType.findField(name.toString()).translate() + IsaToken.RPAREN.toString();
+        return IsaToken.LPAREN.toString() + TRStateDefinition.state.recordType.findField(name.toString()).translate() + IsaToken.RPAREN.toString();
     }
 
     public String translate()

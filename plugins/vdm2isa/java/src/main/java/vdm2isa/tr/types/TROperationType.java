@@ -7,6 +7,7 @@ import com.fujitsu.vdmj.tc.definitions.TCStateDefinition;
 import com.fujitsu.vdmj.tc.lex.TCNameList;
 import com.fujitsu.vdmj.tc.lex.TCNameToken;
 import com.fujitsu.vdmj.typechecker.NameScope;
+import com.fujitsu.vdmj.tc.types.TCUnresolvedType;
 
 import javax.xml.transform.Result;
 
@@ -59,7 +60,9 @@ public class TROperationType extends TRFunctionType{
 		super.setup();
 		setFormattingSeparator("\n\t");
 		parameters.setCurried(true);
-
+		// System.out.println("===OperationType===");
+		// System.out.println(parameters);
+		// System.out.println(getInnerType());
 	}
 
     @Override
@@ -83,13 +86,23 @@ public class TROperationType extends TRFunctionType{
 	@Override
 	public TCFunctionType getVDMFunctionPreType()
 	{
-		return ((TCOperationType)getVDMType()).getPreType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
+		TCFunctionType pre = ((TCOperationType)getVDMType()).getPreType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
+
+		pre.parameters.add(new TCUnresolvedType(TRStateDefinition.state.getName()));
+		System.out.println(pre.toDisplay());
+		return pre;
 	}
 
 	@Override
 	public TCFunctionType getVDMFunctionPostType()
 	{
-		return ((TCOperationType)getVDMType()).getPostType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
+		TCFunctionType post = ((TCOperationType)getVDMType()).getPostType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
+
+		// replace void type with state
+
+		//post.parameters.add(new TCUnresolvedType(TRStateDefinition.state.getName()));
+		System.out.println(post.toDisplay());
+		return post;
 	}
 
 	@Override

@@ -183,11 +183,6 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
         TRNode.setup(predef, postdef, precondition, postcondition, type, state, paramDefinitions, parameterPatterns, unresolved);
     }
 
-    // @Override
-    // public IsaToken isaToken() {
-    //     return IsaToken.EOF;
-    // }
-
     @Override
     public <R, S> R apply(TRDefinitionVisitor<R, S> visitor, S arg) {
         return visitor.caseExplicitOperationDefinition(this, arg);
@@ -272,6 +267,6 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
     @Override 
 	public boolean isImplicitFunction()
 	{
-		return true;
+		return false;
 	}
 }
