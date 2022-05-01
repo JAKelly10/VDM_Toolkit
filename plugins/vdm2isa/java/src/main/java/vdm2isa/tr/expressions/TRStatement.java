@@ -7,6 +7,7 @@ import vdm2isa.messages.IsaInfoMessage;
 import vdm2isa.messages.IsaWarningMessage;
 import vdm2isa.tr.TRNode;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.visitors.TRExpressionVisitor;
 import vdm2isa.tr.patterns.TRMultipleBindList;
@@ -52,9 +53,9 @@ public abstract class TRStatement extends TRExpression {
         return visitor.caseTRStatement(this, arg);
     }
 
-    // public String translate(){
-    //     return comments.translate();
-    // }
+    public String translate(){
+        return comments.translate();// + TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null) + "\n\t";
+    }
 
     public IsaToken isaToken() {
         return IsaToken.EOF;

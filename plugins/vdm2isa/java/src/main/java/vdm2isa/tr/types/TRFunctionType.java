@@ -61,7 +61,6 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 		// presume that all function types will be curried
 		TRNode.setup(parameters, result); 
 		parameters.setCurried(true);
-		//System.out.println(toString());
 	}
 
 	@Override 
@@ -121,13 +120,11 @@ public class TRFunctionType extends TRAbstractInnerTypedType
 
 	public TCFunctionType getVDMFunctionCurriedPreType(boolean isCurried)
 	{
-		System.out.println(((TCFunctionType)getVDMType()).getCurriedPreType(isCurried).toDisplay());
 		return ((TCFunctionType)getVDMType()).getCurriedPreType(isCurried);
 	}
 
 	public TCFunctionType getVDMFunctionCurriedPostType(boolean isCurried)
 	{
-		System.out.println(((TCFunctionType)getVDMType()).getCurriedPostType(isCurried).toDisplay());
 		return ((TCFunctionType)getVDMType()).getCurriedPostType(isCurried);
 	}
 

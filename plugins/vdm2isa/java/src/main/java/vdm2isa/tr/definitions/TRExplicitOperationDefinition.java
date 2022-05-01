@@ -22,6 +22,7 @@ import vdm2isa.tr.annotations.TRAnnotationList;
 import vdm2isa.tr.definitions.visitors.TRDefinitionVisitor;
 import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
 import vdm2isa.tr.definitions.TRStateDefinition;
+import vdm2isa.tr.definitions.TRDefinitionListList;
 import vdm2isa.tr.definitions.TRDefinitionList;
 import vdm2isa.tr.definitions.TRDefinition;
 import vdm2isa.tr.expressions.TRApplyExpression;
@@ -97,7 +98,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 			excluded,
 			null, // typeParams
 			type,
-			null,  // needs to be done in setup potentially
+			TRPatternListList.newPatternListList(parameterPatterns),  // paramPatternList
 			body, // body
 			precondition,
 			postcondition, 
@@ -176,7 +177,7 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 
     @Override
     public void setup(){
-        paramPatternList = TRPatternListList.newPatternListList(TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(location, false))).getFlatPatternList());
+        paramPatternList = TRPatternListList.newPatternListList(TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(TRStateDefinition.state.location, false))).getFlatPatternList());
         paramPatternList.setSemanticSeparator(IsaToken.SPACE.toString());
         super.setup();
         setFormattingSeparator("\n\t");
@@ -187,6 +188,18 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
     public <R, S> R apply(TRDefinitionVisitor<R, S> visitor, S arg) {
         return visitor.caseExplicitOperationDefinition(this, arg);
     }
+
+    @Override
+	protected boolean parametersNeedsPatternContext()
+	{
+		return true;
+	}
+
+    // @Override
+	// protected String translateParametersPatternContext()
+	// {
+	// 	return super.translate();
+	// }
 
     // @Override
     public String t() {

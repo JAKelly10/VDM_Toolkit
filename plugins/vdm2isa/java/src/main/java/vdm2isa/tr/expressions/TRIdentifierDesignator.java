@@ -49,12 +49,12 @@ public class TRIdentifierDesignator extends TRStateDesignator {
         return visitor.caseTRStateDesignator(this, arg);
     }
 
-    public String translateNoBind()
+    public String translate()
     {
-        return IsaToken.LPAREN.toString() + TRStateDefinition.state.recordType.findField(name.toString()).translate() + IsaToken.RPAREN.toString();
+        return TRStateDefinition.state.recordType.findField(name.toString()).getIsabelleTagName();
     }
 
-    public String translate()
+    public String getName()
     {
         return name.toString();
     }

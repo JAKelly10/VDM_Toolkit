@@ -82,7 +82,7 @@ public class TRApplyExpression extends TRExpression
 	}
 
 	/**
-	 * The best guess of the apply expression type, is the type of its root; 
+	 * The best guess of the applytranslate expression type, is the type of its root; 
 	 * wait! No, that can be union type. Oh dear. Can't quite figure out
 	 */
 	@Override

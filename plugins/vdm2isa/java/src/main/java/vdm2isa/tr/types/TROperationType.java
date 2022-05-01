@@ -44,7 +44,7 @@ public class TROperationType extends TRFunctionType{
 
 	private void StateAddedParameters()
 	{
-		TRType paramType = TRStateDefinition.state.recordType.copy(false);
+		TRType paramType = TRStateDefinition.state.recordType.copy(atTopLevelDefinition());
 		parameters.add(paramType);
 	}
 
@@ -60,9 +60,6 @@ public class TROperationType extends TRFunctionType{
 		super.setup();
 		setFormattingSeparator("\n\t");
 		parameters.setCurried(true);
-		// System.out.println("===OperationType===");
-		// System.out.println(parameters);
-		// System.out.println(getInnerType());
 	}
 
     @Override
@@ -89,7 +86,6 @@ public class TROperationType extends TRFunctionType{
 		TCFunctionType pre = ((TCOperationType)getVDMType()).getPreType((TCStateDefinition)TRStateDefinition.state.getVDMDefinition(), null, false);
 
 		pre.parameters.add(new TCUnresolvedType(TRStateDefinition.state.getName()));
-		System.out.println(pre.toDisplay());
 		return pre;
 	}
 
@@ -101,7 +97,6 @@ public class TROperationType extends TRFunctionType{
 		// replace void type with state
 
 		//post.parameters.add(new TCUnresolvedType(TRStateDefinition.state.getName()));
-		System.out.println(post.toDisplay());
 		return post;
 	}
 

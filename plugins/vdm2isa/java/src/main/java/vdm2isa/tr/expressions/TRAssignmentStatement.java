@@ -65,8 +65,8 @@ public class TRAssignmentStatement extends TRStatement {
         // }
         //System.out.println(TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null));
         // Check Parattern context is the correct dummy?
-        return TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null) + "\n\t" + "seqcomp" +
-        IsaToken.SPACE.toString() + target.translate() + IsaToken.SPACE.toString() + exp.translate();
+        return super.translate() + TRStateDefinition.state.name.toString() + // Got to be same name as state param
+        IsaToken.LPAREN.toString() + target.translate() + IsaToken.RECORD_MODIFIER.toString() + exp.translate() + IsaToken.RPAREN.toString();
     }
 
     public IsaToken isaToken() {

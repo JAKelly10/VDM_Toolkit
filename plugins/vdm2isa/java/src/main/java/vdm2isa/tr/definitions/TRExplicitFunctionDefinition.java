@@ -230,9 +230,9 @@ public class TRExplicitFunctionDefinition extends TRAbstractFunctionDefinition
 				if (plist.size() != ptypes.size())
 				{
 					report(IsaErrorMessage.VDMSL_INVALID_EXPR_4P, "explicit function", name.toString(), plist.size(), ptypes.size());
-					System.out.println("===FuncitonDef===");
-					System.out.println(plist);
-					System.out.println(ptypes);
+					// System.out.println("===FuncitonDef===");
+					// System.out.println(plist);
+					// System.out.println(ptypes);
 				}
 				else
 				{
