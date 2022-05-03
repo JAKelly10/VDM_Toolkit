@@ -33,6 +33,7 @@ import vdm2isa.tr.patterns.TRBasicPattern;
 import vdm2isa.tr.patterns.TRPattern;
 import vdm2isa.tr.patterns.TRPatternList;
 import vdm2isa.tr.patterns.TRPatternListList;
+import vdm2isa.tr.patterns.TRRecordPattern;
 import vdm2isa.tr.patterns.TRUnionContext;
 import vdm2isa.tr.types.TRFunctionType;
 import vdm2isa.tr.types.TRType;
@@ -177,7 +178,8 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 
     @Override
     public void setup(){
-        paramPatternList = TRPatternListList.newPatternListList(TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(TRBasicPattern.dummyPattern(TRStateDefinition.state.location, false))).getFlatPatternList());
+        paramPatternList = TRPatternListList.newPatternListList(TRPatternListList.newPatternListList(parameterPatterns, TRPatternList.newPatternList(
+            TRRecordPattern.RecordPatternGenerator(TRStateDefinition.state.recordType,TRStateDefinition.state.recordType.location))).getFlatPatternList());
         paramPatternList.setSemanticSeparator(IsaToken.SPACE.toString());
         super.setup();
         setFormattingSeparator("\n\t");
