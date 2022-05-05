@@ -198,12 +198,6 @@ public class TRExplicitOperationDefinition extends TRExplicitFunctionDefinition 
 	}
 
     // @Override
-	// protected String translateParametersPatternContext()
-	// {
-	// 	return super.translate();
-	// }
-
-    // @Override
     public String t() {
         StringBuilder sb = new StringBuilder();
         // translate the precondition

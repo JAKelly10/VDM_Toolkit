@@ -41,7 +41,7 @@ public class TRRecordPattern extends TRAbstractContextualPattern {
 
         TCRecordPattern r = new TCRecordPattern(record.typename, tcpl);
 
-        return new TRRecordPattern(r, location, record.typename,trpl,record);
+        return new TRRecordPattern(r, location, record.typename, trpl, record);
     }
     
     @Override 

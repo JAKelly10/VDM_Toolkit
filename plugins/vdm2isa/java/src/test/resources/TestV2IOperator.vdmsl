@@ -19,7 +19,8 @@ operations
 
 Explicit_no_condition: real*real ==> ()
 Explicit_no_condition(M,A) == 
-   (y := y*M+A);
+   (y := y*M;
+    y := y+A);
 
 -- Implicit(M,A:real) ==
 --    (y := y*M+A)

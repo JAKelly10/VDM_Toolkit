@@ -7,6 +7,7 @@ import com.fujitsu.vdmj.tc.statements.TCStatementList;
 
 import vdm2isa.tr.TRMappedList;
 import vdm2isa.tr.TRNode;
+import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.expressions.TRStatement;
 import vdm2isa.tr.patterns.TRMultipleBind;
 import vdm2isa.tr.patterns.TRPatternContext;
@@ -48,6 +49,28 @@ public class TRStatementList extends TRMappedList<TCStatement, TRStatement> {
 	{
 		super.setup();
 		setFormattingSeparator("\n\t");
+	}
+
+	@Override
+	public String translate()
+	{
+		StringBuilder sb = new StringBuilder();
+		if (!isEmpty())
+		{
+			sb.append(translateElement(0));
+			for (int i = 1; i < size(); i++)
+			{
+				sb.append(getFormattingSeparator());
+				sb.append(getSemanticSeparator());
+                sb.append(getFormattingSeparator());
+				sb.append(translateElement(i));
+			}
+			sb.append(getFormattingSeparator());
+			sb.append(getSemanticSeparator());
+			sb.append(getFormattingSeparator());
+			sb.append(TRStateDefinition.state.name.toString());
+		}
+		return sb.toString();
 	}
 
 }

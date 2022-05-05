@@ -5,25 +5,15 @@ import vdm2isa.lex.TRIsaVDMCommentList;
 import vdm2isa.messages.IsaErrorMessage;
 import vdm2isa.messages.IsaInfoMessage;
 import vdm2isa.messages.IsaWarningMessage;
-import vdm2isa.tr.TRNode;
-import vdm2isa.tr.definitions.TRExplicitFunctionDefinition;
 import vdm2isa.tr.expressions.TRExpression;
 import vdm2isa.tr.expressions.TRBinaryExpression;
 import vdm2isa.tr.definitions.TRStateDefinition;
 import vdm2isa.tr.expressions.visitors.TRExpressionVisitor;
 import vdm2isa.tr.patterns.TRMultipleBindList;
-import vdm2isa.tr.patterns.TRPattern;
+import vdm2isa.tr.patterns.TRRecordPattern;
 import vdm2isa.tr.patterns.TRPatternListList;
-import vdm2isa.tr.patterns.TRPatternContext;
-import vdm2isa.tr.types.TRAbstractInnerTypedType;
-import vdm2isa.tr.types.TRInvariantType;
-import vdm2isa.tr.types.TRMapType;
-import vdm2isa.tr.types.TROptionalType;
 import vdm2isa.tr.types.TRRecordType;
-import vdm2isa.tr.types.TRSeqType;
-import vdm2isa.tr.types.TRSetType;
 import vdm2isa.tr.types.TRType;
-import vdm2isa.tr.types.TRUnknownType;
 
 import com.fujitsu.vdmj.lex.LexLocation;
 import com.fujitsu.vdmj.tc.definitions.TCDefinitionList;
@@ -57,7 +47,9 @@ public class TRAssignmentStatement extends TRStatement {
         return visitor.caseTRStatement(this, arg);
     }
 
-    public String translate(){
+    public String translate()
+    {
+        TRPatternListList patternContextProjection = TRPatternListList.newPatternListList(TRRecordPattern.RecordPatternGenerator(TRStateDefinition.state.recordType,TRStateDefinition.state.recordType.location));
         // if(exp instanceof TRBinaryExpression) {
         //     System.out.println(((TRBinaryExpression)exp).toString());
         //     System.out.println(((TRBinaryExpression)exp).left.toString());
@@ -65,8 +57,13 @@ public class TRAssignmentStatement extends TRStatement {
         // }
         //System.out.println(TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null));
         // Check Parattern context is the correct dummy?
-        return super.translate() + TRStateDefinition.state.name.toString() + // Got to be same name as state param
-        IsaToken.LPAREN.toString() + target.translate() + IsaToken.RECORD_MODIFIER.toString() + exp.translate() + IsaToken.RPAREN.toString();
+        return super.translate() +  IsaToken.LET.toString() + IsaToken.SPACE.toString() + 
+        TRStateDefinition.state.name.toString() + 
+        IsaToken.SPACE.toString() + IsaToken.EQUALS.toString() + IsaToken.SPACE.toString() +
+        TRStateDefinition.state.name.toString() + // Got to be same name as state param
+        IsaToken.LPAREN.toString() + target.translate() + IsaToken.RECORD_MODIFIER.toString() + exp.translate() + IsaToken.RPAREN.toString() +
+        IsaToken.SPACE.toString() + IsaToken.IN.toString() + getFormattingSeparator() +
+        patternContextProjection.patternContextTranslate(null);
     }
 
     public IsaToken isaToken() {
