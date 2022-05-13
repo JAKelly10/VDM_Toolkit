@@ -68,7 +68,7 @@ public class TRStatementList extends TRMappedList<TCStatement, TRStatement> {
 			sb.append(getFormattingSeparator());
 			sb.append(getSemanticSeparator());
 			sb.append(getFormattingSeparator());
-			sb.append(TRStateDefinition.state.name.toString());
+			sb.append("dummy0"); // Relying on state being the first dummy0
 		}
 		return sb.toString();
 	}

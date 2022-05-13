@@ -50,23 +50,40 @@ public class TRAssignmentStatement extends TRStatement {
     public String translate()
     {
         TRPatternListList patternContextProjection = TRPatternListList.newPatternListList(TRRecordPattern.RecordPatternGenerator(TRStateDefinition.state.recordType,TRStateDefinition.state.recordType.location));
-        // if(exp instanceof TRBinaryExpression) {
-        //     System.out.println(((TRBinaryExpression)exp).toString());
-        //     System.out.println(((TRBinaryExpression)exp).left.toString());
-        //     System.out.println(((TRBinaryExpression)exp).right.toString());
-        // }
-        //System.out.println(TRStateDefinition.state.recordType.getInvDef().getParameters().patternContextTranslate(null));
         // Check Parattern context is the correct dummy?
         String StateParamName = "dummy0";
-        return super.translate() +  IsaToken.LET.toString() + IsaToken.SPACE.toString() + 
-        // TRStateDefinition.state.name.toString() + 
-        StateParamName +
-        IsaToken.SPACE.toString() + IsaToken.EQUALS.toString() + IsaToken.SPACE.toString() +
-        // TRStateDefinition.state.name.toString() + // Got to be same name as state param
-        StateParamName +
-        IsaToken.LPAREN.toString() + target.translate() + IsaToken.RECORD_MODIFIER.toString() + exp.translate() + IsaToken.RPAREN.toString() +
-        IsaToken.SPACE.toString() + IsaToken.IN.toString() + getFormattingSeparator() +
-        patternContextProjection.patternContextTranslate(null);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.translate());
+        sb.append(IsaToken.LET.toString());
+        sb.append(IsaToken.SPACE.toString());
+        sb.append(StateParamName);
+        sb.append(IsaToken.SPACE.toString());
+        sb.append(IsaToken.EQUALS.toString());
+        sb.append(IsaToken.SPACE.toString());
+        sb.append(StateParamName);
+        sb.append(IsaToken.LRECORD.toString());
+        sb.append(target.translate());
+        sb.append(IsaToken.RECORD_MODIFIER.toString() );
+        sb.append(exp.translate());
+        sb.append(IsaToken.RRECORD.toString());
+        sb.append(IsaToken.SPACE.toString());
+        sb.append(IsaToken.IN.toString());
+        sb.append(getFormattingSeparator());
+        sb.append(patternContextProjection.patternContextTranslate(null));
+
+        return sb.toString();
+
+
+        // return super.translate() +  IsaToken.LET.toString() + IsaToken.SPACE.toString() + 
+        // // TRStateDefinition.state.name.toString() + 
+        // StateParamName +
+        // IsaToken.SPACE.toString() + IsaToken.EQUALS.toString() + IsaToken.SPACE.toString() +
+        // // TRStateDefinition.state.name.toString() + // Got to be same name as state param
+        // StateParamName +
+        // IsaToken.LPAREN.toString() + target.translate() + IsaToken.RECORD_MODIFIER.toString() + exp.translate() + IsaToken.RPAREN.toString() +
+        // IsaToken.SPACE.toString() + IsaToken.IN.toString() + getFormattingSeparator() +
+        // patternContextProjection.patternContextTranslate(null);
     }
 
     public IsaToken isaToken() {
